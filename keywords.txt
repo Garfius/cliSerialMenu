@@ -1,0 +1,24 @@
+#######################################
+# Syntax Coloring Map menuSystemOverTty
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+menuSystemOverTty	KEYWORD1	menuSystemOverTty
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+addscreen	KEYWORD2
+addMenuOption	KEYWORD2
+run	KEYWORD2
+refresh	KEYWORD2
+msgYes	KEYWORD2
+msgSmallWait	KEYWORD2
+msgTxtInputSimple	KEYWORD2
+msgPause	KEYWORD2
+#######################################
+# Constants (LITERAL1)
+#######################################
