@@ -1,0 +1,19 @@
+{
+    "name": "Menu-UI",
+    "keywords": "menu, interface, vt100, user, ui",
+    "description": "Arduino Menu user interface using keybaord arrows and escape, built by object Oriented Programing Inheritance",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/Garfius/cliSerialMenu.git"
+    },
+    "authors": [
+      {
+        "name": "Gerard Forcada",
+        "email": "garfius@gmail.com",
+        "maintainer": true
+      }
+    ],
+    "version": "1.0",
+    "frameworks": "arduino",
+    "platforms": "*"
+  }

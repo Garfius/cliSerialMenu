@@ -4,14 +4,20 @@
 #define motionDetectPin 2
 #define servo1Pin 10
 #define servo2Pin 11
-/*
-Examples to-do
-Servos+PID
-TerminalParser arrows/print
-Led builtin
-RGB
-Multi screenMenu
-Scrolling menu
+/**
+ * To be used with vt100 compatible terminal consoles like Putty, screen(linux) or TeraTerm(Windows) DO NOT USE Arduino IDE SERIAL MONITOR. 
+ * 
+ * Here 4 menu options are shown, the first automaticaly changes when the motion detection pin state changes
+ * You might move the servos connected at the setvo 1 pin and servo 2 pin using right and left arrows at the menu option
+ * The last option is to show user interface capabilities like text prompt, alert messaging...
+ * Use the arrows to navigate
+ * 
+ * Arduino Menu System demo2
+ * -Idle                          <---- Shows automatic refresh capability
+ * -Move servo 1:90               <---- Move a servo
+ * -Move servo 2:90               <---- Move a servo
+ * -Show menu UI capabilities     <---- Use UI stuff
+
 */
 Servo myServo1;
 Servo myServo2;

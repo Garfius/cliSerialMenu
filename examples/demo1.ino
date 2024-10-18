@@ -1,6 +1,19 @@
 #include <Arduino.h>
 #include <menu.h>
-
+/**
+ * 
+ * To be used with vt100 compatible terminal consoles like Putty, screen(linux) or TeraTerm(Windows) DO NOT USE Arduino IDE SERIAL MONITOR. 
+ * 
+ * Here you can use 4 menu options at the main screen menu, plus a second screen menu which is dynamically generated.
+ * Use the arrows to navigate
+ * 
+ * Arduino Menu System demo1
+ * -Select value:50                   <---- Slider menuOption demo
+ * -Board LED:OFF                     <---- Switch menuOption demo
+ * -A dyn-generated scrolling menu    <---- Jump to secondary screen menu which is dynamically generated
+ * -Change menu length                <---- You might set the amount of displayed menu options
+ *
+*/
 class resizer : public menuOption{
   public:
     resizer() :menuOption("Change menu length"){}

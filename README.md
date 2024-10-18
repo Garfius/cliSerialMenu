@@ -12,7 +12,6 @@ Tested on ATMega328p(Arduino nano) and RP2040(Raspberry pi pico)
  * Be aware of captions text(char *) length, must be less than menuTextArrayLength(menu.h), might corrupt memory!
  * YOU must learn Object Oriented Programming, and inheritance, or just copy examples
 
-
 ## API
 
 See docs/html/index.html
@@ -20,3 +19,19 @@ See docs/html/index.html
 ## Examples
 
 See [examples](examples) folder.
+
+## This is what you get
+
+demo1.ino initial screen
+![demo1.ino initial screen](/docs/pictures/demo1_main.gif)
+
+demo2.ino initial screen
+![demo1.ino initial screen](/docs/pictures/demo2_main.gif)
+
+Dynamically generated scrolling menu
+![demo1.ino initial screen](/docs/pictures/dynamic.gif)
+
+Some user interface features
+![demo1.ino initial screen](/docs/pictures/UI_stuff.gif)
+
+
