@@ -16,18 +16,23 @@
 #include <Arduino.h>
 
 //---------------------RESOURCES USAGE HERE
-#ifndef screenMenuMax
+//---------------------Uncomment the following line for microcontrollers bigger than Atmega328P line RP2040 or ESP32
+// #define _MENU_UI_BIG_RAM_
+
+//---------------------RESOURCES USAGE HERE
+#ifdef _MENU_UI_BIG_RAM_
+  #define screenMenuMax 6// maximum screenMenu instances, displays of menuitems
+  #define menuTextArrayLength 80 // Max caption length 
+  #define menuOptionsMax 12 // maximum menu options allowed in memory for each screenMenu instance
+  #define displayMenuOptionsDefault 8 // the amount of menu options on the screen, always lower than screenMenuMax
+#else
   #define screenMenuMax 4// maximum screenMenu instances, displays of menuitems
-#endif
-#ifndef menuTextArrayLength
   #define menuTextArrayLength 40 // Max caption length 
-#endif
-#ifndef menuOptionsMax
   #define menuOptionsMax 7 // maximum menu options allowed in memory for each screenMenu instance
-#endif
-#ifndef displayMenuOptionsDefault
   #define displayMenuOptionsDefault 4 // the amount of menu options on the screen, always lower than screenMenuMax
 #endif
+
+
 
 #define menuTextLength (menuTextArrayLength-1)
 
