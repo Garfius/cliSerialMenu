@@ -119,8 +119,8 @@ void sdBrowserDisplay::bye(){
     }else{
         currentFolder = currentFolder.substring(0,currentFolder.lastIndexOf('/'));
         downValue =0;
-        this->refreshMenu();
     }
+    this->refreshMenu();
 }
 bool sdBrowserDisplay::refreshMenu()//, bool canviaTitol
 {

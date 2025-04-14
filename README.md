@@ -1,16 +1,28 @@
 # Arduino Menu UI
 
-An [Arduino](https://arduino.cc/) library which provides a menu based user interface and a few utilities.
+An [Arduino](https://arduino.cc/) library which provides a menu based user interface and a few UI utilities.
 
-Really elastic, just instantiate menu options and add it to a screen, and add the screens to the menu system.
+Really elastic, just instantiate inherited menu option's and add it to a screen, and add the screens to the menu system.
+
+The menu system as usual needs a kickstart citing the serial where the vt100 compatible user interface is located (putty, screen, teraTerm...):
+```
+menuSystemOverTty.init(&Serial);// requiered at boot 
+```
+
+And the obvious RUN
+```
+void loop() {
+  menuSystemOverTty.run();
+}
+```
 
 ## Compatible Hardware
 
-Tested on ATMega328p(Arduino nano) and RP2040(Raspberry pi pico)
+Tested on ATMega328p(Arduino nano) and RP2040(Raspberry pi pico-maxgerhardt/earlephilhower-platformio)
 
 **NOTES**:
- * Be aware of captions text(char *) length, must be less than menuTextArrayLength(menu.h), might corrupt memory!
- * YOU must learn Object Oriented Programming, and inheritance, or just copy examples
+ * Be aware of text captions text(char *) length, must be shorter than menuTextArrayLength(menu.h), might corrupt memory!
+ * YOU must learn Object Oriented Programming, and inheritance, or just copy examples, lol
 
 ## API
 
@@ -33,5 +45,7 @@ Dynamically generated scrolling menu
 
 Some user interface features
 ![demo1.ino initial screen](/docs/pictures/UI_stuff.gif)
+
+[SD card browser](https://youtu.be/0rnFhgVs5PA)
 
 
