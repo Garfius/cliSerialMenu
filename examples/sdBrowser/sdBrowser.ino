@@ -3,9 +3,23 @@
 #include <SD.h>
 #include <time.h>
 #include <menu.h>
-
-//--------Uncomment _MENU_UI_BIG_RAM_ from menu.h:19 for proper displaying, tested on rp2040
+/**
+ * To be used with vt100 compatible terminal consoles like Putty, screen(linux) or TeraTerm(Windows) DO NOT USE Arduino IDE SERIAL MONITOR. 
+ * Tested using earlephilhower/maxgerhardt, on vscode platformio Raspberry pi pico generic board(rp2040), shall work on ESP
+ * 
+ * This sketch allows you to browse files and folders of a SD/TF card.
+ * Press enter to show file info or enter folder
+ * Press ESC to go back or display SD card info.
+ * 
+ * Details(menu.h):
+ * This sketch requieres menuOptionsMax to be 2+(screenMenuOptions = displayMenuOptionsDefault) to proper display of 'UP!' and 'DN!' signals
+ * Uncomment _MENU_UI_BIG_RAM_ :19 for proper displaying
+*/
+//------------------------------------CONFIGURATION START------------------------------------
 #define sdCsPin 17// Choose your SD CS pin
+#define serialPortUsed Serial// Choose your Serial port
+#define baudRateUsed 115200// Choose your baud rate speed
+//------------------------------------CONFIGURATION END------------------------------------
 
 static const char * sdError = "SD err";
 
@@ -210,13 +224,13 @@ sdBrowserDisplay navegador = sdBrowserDisplay();
 void setup() {
   //hardware init
   SPI.begin();
-  Serial.begin(115200);
-  while (!Serial) {;}
+  serialPortUsed.begin(115200);
+  while (!serialPortUsed) {;}
   
   //build menu structure
   menuSystemOverTty.addscreen(&navegador);
   //menu init
-  menuSystemOverTty.init(&Serial);// requiered at boot 
+  menuSystemOverTty.init(&serialPortUsed);// requiered at boot 
 }
 
 void loop() {
