@@ -38,14 +38,16 @@ demo1.ino initial screen
 ![demo1.ino initial screen](/docs/pictures/demo1_main.gif)
 
 demo2.ino initial screen
-![demo1.ino initial screen](/docs/pictures/demo2_main.gif)
+![demo2.ino initial screen](/docs/pictures/demo2_main.gif)
+
+[demo2.ino video](https://youtu.be/EKHbzrODCdk)
 
 Dynamically generated scrolling menu
-![demo1.ino initial screen](/docs/pictures/dynamic.gif)
+![Dynamically generated scrolling menu](/docs/pictures/dynamic.gif)
 
 Some user interface features
-![demo1.ino initial screen](/docs/pictures/UI_stuff.gif)
+![Some user interface features](/docs/pictures/UI_stuff.gif)
 
-[SD card browser](https://youtu.be/0rnFhgVs5PA)
+[SD card browser video](https://youtu.be/0rnFhgVs5PA)
 
 
