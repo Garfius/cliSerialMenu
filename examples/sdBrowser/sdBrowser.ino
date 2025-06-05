@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <SPI.h>
 #include <SD.h>
 #include <time.h>
@@ -28,11 +27,11 @@ class sdBrowserDisplay : public screenMenu{
         String currentFolder = "";
     protected:
         unsigned int downValue =0;
-        bool notEneded = false;
         char fileName[menuOptionsMax][menuTextArrayLength];/**< Caption */
     public:
         menuOption menuOptions[menuOptionsMax];
         sdBrowserDisplay();
+        void setHasMores();
         virtual bool refreshMenu();
         virtual void run(unsigned int index);
         virtual bool pushDn();
@@ -41,9 +40,10 @@ class sdBrowserDisplay : public screenMenu{
 };
 sdBrowserDisplay::sdBrowserDisplay() : screenMenu("No OS SD browse")
 {}
+void sdBrowserDisplay::setHasMores(){}// just to disable default beheaviour
 void sdBrowserDisplay::run(unsigned int index){
     
-    String tmpStr = String(fileName[index+offsetFromTop]);
+    String tmpStr = String(fileName[index]);
     
     if (!SD.begin(sdCsPin))
     {
@@ -59,7 +59,7 @@ void sdBrowserDisplay::run(unsigned int index){
             currentFolder = tmpStr;
             menuSystemOverTtyP->userTty->print("Folder change to:");
             menuSystemOverTtyP->userTty->println(currentFolder.c_str());
-            downValue = offsetFromTop = 0;
+            downValue = 0;
             this->refreshMenu();
         }else{
             menuSystemOverTtyP->userTty->print("Name:");
@@ -85,7 +85,7 @@ void sdBrowserDisplay::run(unsigned int index){
 }
 bool sdBrowserDisplay::pushDn()
 {
-    if(notEneded){
+    if(hasMoreBelow){
         downValue++;
         refreshMenu();
         return true;
@@ -132,7 +132,7 @@ void sdBrowserDisplay::bye(){
         menuSystemOverTtyP->msgPause();
     }else{
         currentFolder = currentFolder.substring(0,currentFolder.lastIndexOf('/'));
-        downValue =0;
+        downValue = 0;
     }
     this->refreshMenu();
 }
@@ -148,7 +148,6 @@ bool sdBrowserDisplay::refreshMenu()//, bool canviaTitol
     const char *suffixes[] = {"B", "KB", "MB"};
     const unsigned int num_suffixes = sizeof(suffixes) / sizeof(suffixes[0]);
     
-    if(downValue > 0){offsetFromTop = 1;}else{offsetFromTop = 0;}
     totalMenuOptions =0;
     File entry;
     String tmpStr;
@@ -171,10 +170,10 @@ bool sdBrowserDisplay::refreshMenu()//, bool canviaTitol
             break;
         }
         tmpStr = (String)entry.name();
-        strcpy(fileName[totalMenuOptions+offsetFromTop],entry.name());
-        menuOptions[totalMenuOptions+offsetFromTop] = menuOption();
-        menuOptions[totalMenuOptions+offsetFromTop].autoRefresh = false;
-        displayMenuOptionsPnt[totalMenuOptions+offsetFromTop] = &menuOptions[totalMenuOptions+offsetFromTop];
+        strcpy(fileName[totalMenuOptions],entry.name());
+        menuOptions[totalMenuOptions] = menuOption();
+        menuOptions[totalMenuOptions].autoRefresh = false;
+        displayMenuOptionsPnt[totalMenuOptions] = &menuOptions[totalMenuOptions];
         if(entry.isDirectory()){
             tmpStr = String("./"+String(entry.name())).substring(0,menuTextLength);
         }else{
@@ -187,7 +186,7 @@ bool sdBrowserDisplay::refreshMenu()//, bool canviaTitol
             }
             tmpStr = String(String(entry.name()) + " " + String(sizeTmp) + suffixes[tmpInt]).substring(0,menuTextLength);
         }
-        strcpy(menuOptions[totalMenuOptions+offsetFromTop].text, tmpStr.c_str());
+        strcpy(menuOptions[totalMenuOptions].text, tmpStr.c_str());
 
         totalMenuOptions++;
         if(totalMenuOptions >= menuSystemOverTtyP->screenMenuOptions){
@@ -195,14 +194,14 @@ bool sdBrowserDisplay::refreshMenu()//, bool canviaTitol
         }
     }
     
-    notEneded = false;
+    hasMoreBelow = false;
     if (entry)// has acabat en ple
     {
         while(true){
             entry = root.openNextFile();
             if(entry){// n'hi havia un de més
-                notEneded = true;// posar dn al caption
-                totalMenuOptions+=(offsetFromTop+1);
+                hasMoreBelow = true;// posar dn al caption
+                totalMenuOptions+=(+1);
             }else{
                 break;
             }
@@ -214,6 +213,7 @@ bool sdBrowserDisplay::refreshMenu()//, bool canviaTitol
     {
         menuSystemOverTtyP->msgSmallWait("No files found");
     }
+    hasMoreAbove = (downValue > 0);
     return false;
 }
 

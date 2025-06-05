@@ -36,11 +36,7 @@ menu::menu(){
 void menu::init(Stream *userSerialTerminal){
     terminalParser::init(userSerialTerminal);
     if(totalScreenMenus < 1)return;// comentar?
-    activeScreenMenu = 0;
-    pantalles[0]->whereICame = -1;
-    if(!pantalles[activeScreenMenu]->autoRefresh){
-        pantalles[activeScreenMenu]->refreshMenu();
-    }
+    setscreen(0);
     show();
 }
 /**
@@ -73,10 +69,10 @@ void menu::show(bool resetCursor){
     }else{
         tmp = screenMenuOptions;// 3
     }
-    if(pantalles[activeScreenMenu]->offsetFromTop > 0 ){
+    if(pantalles[activeScreenMenu]->hasMoreAbove){
         userTty->print(msgOptionsUp);
     }
-    if((screenMenuOptions+pantalles[activeScreenMenu]->offsetFromTop) < pantalles[activeScreenMenu]->totalMenuOptions){
+    if(pantalles[activeScreenMenu]->hasMoreBelow){
         userTty->print(msgOptionsDn);
     }
     userTty->write(colorsTerminalReset);//for(unsigned int i=offsetFromTop;i < (menuSystemOverTtyP->screenMenuOptions+offsetFromTop);i++){  
@@ -167,6 +163,7 @@ void menu::setscreen(int pantallaDesti,bool setWhereICame){
     activeScreenMenu = pantallaDesti;
     pantalles[activeScreenMenu]->offsetFromTop=0;
     pantalles[activeScreenMenu]->refreshMenu();
+    pantalles[activeScreenMenu]->setHasMores();
 }
 void menu::refresh(){
     if(pantalles[activeScreenMenu]->autoRefresh){
@@ -320,12 +317,14 @@ bool screenMenu::refreshMenu(){
     
     return tmp;
 }
-/**
- * 
-*/
+void screenMenu::setHasMores(){
+    hasMoreBelow = ((menuSystemOverTtyP->screenMenuOptions+offsetFromTop)< totalMenuOptions);
+    hasMoreAbove = (offsetFromTop > 0);
+}
 bool screenMenu::pushDn(){
     if((menuSystemOverTtyP->screenMenuOptions+offsetFromTop)< totalMenuOptions){
         offsetFromTop++;
+        setHasMores();
         return true;
     }
     return false;
@@ -333,6 +332,7 @@ bool screenMenu::pushDn(){
 bool screenMenu::pushUp(){
     if(offsetFromTop > 0){
         offsetFromTop--;
+        setHasMores();
         return true;
     }
     return false;

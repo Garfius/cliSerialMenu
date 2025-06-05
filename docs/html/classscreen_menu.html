@@ -54,6 +54,8 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a967fbd675991759e15daa700d22edca9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classscreen_menu.html#a967fbd675991759e15daa700d22edca9">screenMenu</a> (const char *text)</td></tr>
 <tr class="separator:a967fbd675991759e15daa700d22edca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68483f4aceab27d379937a8a9455a955"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classscreen_menu.html#a68483f4aceab27d379937a8a9455a955">setHasMores</a> ()</td></tr>
+<tr class="separator:a68483f4aceab27d379937a8a9455a955"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45db5e941689e19841fba5f1f2020eaa"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classscreen_menu.html#a45db5e941689e19841fba5f1f2020eaa">pushUp</a> ()</td></tr>
 <tr class="separator:a45db5e941689e19841fba5f1f2020eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a090833c1841adba180a32295cc3c3bf4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classscreen_menu.html#a090833c1841adba180a32295cc3c3bf4">pushDn</a> ()</td></tr>
@@ -78,6 +80,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a5775cc8907fd684baa18d4df8ab4a22f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4679002f46acaf7c5d9918d644540bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classscreen_menu.html#ac4679002f46acaf7c5d9918d644540bc">autoRefresh</a> = false</td></tr>
 <tr class="separator:ac4679002f46acaf7c5d9918d644540bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dfb32ebda360ae7ec3b7de7c27674a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classscreen_menu.html#a8dfb32ebda360ae7ec3b7de7c27674a0">hasMoreAbove</a> = false</td></tr>
+<tr class="separator:a8dfb32ebda360ae7ec3b7de7c27674a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2bc759f356a28a9afb2554b2361ca3c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classscreen_menu.html#ae2bc759f356a28a9afb2554b2361ca3c">hasMoreBelow</a> = false</td></tr>
+<tr class="separator:ae2bc759f356a28a9afb2554b2361ca3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a138bc5500e93900823d015025069547a"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classscreen_menu.html#a138bc5500e93900823d015025069547a">totalMenuOptions</a></td></tr>
 <tr class="separator:a138bc5500e93900823d015025069547a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d202ebf35e7fa6d5b521deb092f8b53"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classscreen_menu.html#a4d202ebf35e7fa6d5b521deb092f8b53">offsetFromTop</a> =0</td></tr>
@@ -295,6 +301,32 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a68483f4aceab27d379937a8a9455a955" name="a68483f4aceab27d379937a8a9455a955"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68483f4aceab27d379937a8a9455a955">&#9670;&#160;</a></span>setHasMores()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void screenMenu::setHasMores </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >set hasMoreAbove and hasMoreBelow, to be overwriten on self generated children </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="ac4679002f46acaf7c5d9918d644540bc" name="ac4679002f46acaf7c5d9918d644540bc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac4679002f46acaf7c5d9918d644540bc">&#9670;&#160;</a></span>autoRefresh</h2>
@@ -323,6 +355,36 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p >pointers to menu option/option objects shown , and run by menu </p>
+
+</div>
+</div>
+<a id="a8dfb32ebda360ae7ec3b7de7c27674a0" name="a8dfb32ebda360ae7ec3b7de7c27674a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8dfb32ebda360ae7ec3b7de7c27674a0">&#9670;&#160;</a></span>hasMoreAbove</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool screenMenu::hasMoreAbove = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >tells menu wants Up!(msgOptionsUp) to be shown </p>
+
+</div>
+</div>
+<a id="ae2bc759f356a28a9afb2554b2361ca3c" name="ae2bc759f356a28a9afb2554b2361ca3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2bc759f356a28a9afb2554b2361ca3c">&#9670;&#160;</a></span>hasMoreBelow</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool screenMenu::hasMoreBelow = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >tells menu wants Dn!(msgOptionsDn) to be shown </p>
 
 </div>
 </div>

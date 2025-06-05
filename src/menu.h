@@ -33,7 +33,6 @@
 #endif
 
 
-
 #define menuTextLength (menuTextArrayLength-1)
 
 static const char * msgOptionsUp = " Up!";
@@ -99,13 +98,16 @@ class changeScreenMenuOption : public menuOption{
 class screenMenu{
   protected:
   public: 
-    int whereICame; /**< for screen swapping, where i came from */
-    bool autoRefresh = false;/**< tells menu wants periodical refresh */
-    unsigned int totalMenuOptions;/**< running time total inserted options/options */
-    unsigned int offsetFromTop =0;/**< to slide down tru menuoptions 'no dinamic-generated scroll', not used on inheritance*/
-    char titol[menuTextArrayLength];/**< menu caption*/
-    menuOption *displayMenuOptionsPnt[menuOptionsMax];/**< pointers to menu option/option objects shown , and run by menu*/
-    screenMenu(const char* text);/**< constructor, sets text, needs menu*/
+  int whereICame; /**< for screen swapping, where i came from */
+  bool autoRefresh = false;/**< tells menu wants periodical refresh */
+  bool hasMoreAbove = false;/**< tells menu wants Up!(msgOptionsUp) to be shown */
+  bool hasMoreBelow = false;/**< tells menu wants Dn!(msgOptionsDn) to be shown */
+  unsigned int totalMenuOptions;/**< running time total inserted options/options */
+  unsigned int offsetFromTop =0;/**< to slide down tru menuoptions 'no dinamic-generated scroll', not used on inheritance*/
+  char titol[menuTextArrayLength];/**< menu caption*/
+  menuOption *displayMenuOptionsPnt[menuOptionsMax];/**< pointers to menu option/option objects shown , and run by menu*/
+  screenMenu(const char* text);/**< constructor, sets text, needs menu*/
+    virtual void setHasMores();/**< set hasMoreAbove and hasMoreBelow, to be overwriten on self generated children*/
     virtual bool pushUp();/**< menu showing us tells to push Up*/
     virtual bool pushDn();/**< menu showing us tells to push Dn*/
     virtual bool pushRt(unsigned int index);/**< menu showing us tells to push right */

@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <menu.h>
 #include <Servo.h>
 /**

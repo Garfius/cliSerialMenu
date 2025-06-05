@@ -1,11 +1,4 @@
 #include "terminalParser.h"
-/*#include <stdlib.h>
-#include <stdio.h>*/
-#ifdef finta_linux
-    #include <cctype>
-    #include <iostream>
-    #include <string.h>
-#endif
 /**
 * @file terminalParser.cpp
 * @brief Inheritable byte-by-byte string parser state machine.
