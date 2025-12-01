@@ -1,3 +1,15 @@
+/**
+* @file terminalParser.h
+* @brief object and resources definitions for terminal parser library, Inheritable byte-by-byte string parser state machine.
+* 
+* This library makes intensive use of object-oriented programming.
+* Meant to be inherited to make use of it's features.
+* 
+* @author Gerard Forcada Bigas
+*
+* @date 20/12/22
+*/
+
 #ifndef __terminalParser__
 #define __terminalParser__
 #include <Arduino.h>
@@ -109,11 +121,11 @@ class terminalParser  {
         bool esc;/**< internal state, esc pressed*/
         bool privateControlSequence;/**< internal state*/
         char _buffer[terminalParser_bufferSize];// per poder fer forwarding i anàlisi bugs
-        bool insertStatus;
         char caractersNumeros[4];/**< buffer to parse number sequences*/
         int llistaNumeros[4];/**< used for argv */
         int ignore;/**< amount of characters to ignore*/
     public:
+        bool insertStatus;
         //----------------do console display operations----
         virtual void doClearScreen();/**< clear stream console  */
         virtual void doMoveCursor(int line,int column);/**< sends the move cursor command to stream console */
@@ -133,7 +145,7 @@ class terminalParser  {
         Stream *userTty;/**< ha d'anar a terminalParser per fer les funcions cap a pantalla, millores. */
 
         terminalParser();
-        bool doGuess(char caracter);
+        bool doGuess(char caracter);/**< Parses a character, triggers any function which might correspond regarding previous parsed characters, and returns true if belongs to screen*/
 //-----------------------------------crides internes a heretar--------------------------------
         virtual void tab();/**< tabulador*/
         virtual void lf();/**< line forward*/
@@ -163,7 +175,7 @@ class terminalParser  {
         virtual void eD(unsigned int argc,int *argv);/**< escape command*/
         virtual void vPA(unsigned int argc,int *argv);/**< escape command*/
         virtual void dCH(unsigned int argc,int *argv);/**< escape command*/
-        //virtual void cPR(unsigned int argc,int *argv);/**< select graphic rendition*/
+        virtual void cPR(unsigned int argc,int *argv);/**< cursor position report*/
 };
 
 #endif

@@ -130,6 +130,12 @@ void menu::cUB(unsigned int argc,int *argv){
         show((unsigned int)selectedMenuOption);// terminalparser::cUF
     }
 }
+void menu::cPR(unsigned int argc,int *argv){
+    if(argc != 2)return;
+    terminalRowsCols[0] = (unsigned int)argv[0];
+    terminalRowsCols[1] = (unsigned int)argv[1];
+    terminalParser::cPR(argc,argv);
+}
 void menu::cr(){
     doClearScreen();
     doMoveCursor(1,1);
@@ -456,6 +462,10 @@ bool changeScreenMenuOption::refresh(){
         strcpy(menuOption::text,"2Long");
     }
     return false;
+}
+void menu::queryTerminalSize(){
+    this->userTty->print("\e[200;200H");
+    this->userTty->print("\e[6n");
 }
 
 menu menuSystemOverTty;

@@ -128,17 +128,19 @@ class menu : public terminalParser{
   protected:
     char charTmp;/**< temporal character*/
     unsigned int selectedMenuOption;/**< the actual selected menu index option on display*/
-    unsigned long nextEscBack = 0;/**< move screen back using esc control */
     unsigned long nextRefresh = 0;/**< screen refresh control*/
     bool runningOption = false;/**< esta excutant una opcio */
-    int activeScreenMenu = -1;/**< the actual displayed menu*/
     void show(unsigned int index);/**< redraws selected menuoption text */
     virtual void cUU(unsigned int argc,int *argv);/**< inherited from terminalParser. cursor Dn handler */
     virtual void cUD(unsigned int argc,int *argv);/**< inherited from terminalParser. cursor Up handler */
     virtual void cUF(unsigned int argc,int *argv);/**< inherited from terminalParser. cursor forward right handler*/
     virtual void cUB(unsigned int argc,int *argv);/**< inherited from terminalParser. cursor backward left  handler*/
+    virtual void cPR(unsigned int argc,int *argv);/**< inherited from terminalParser. cursor position report*/
     virtual void cr();/**< inherited from terminalParser. enter */
   public:
+    unsigned int terminalRowsCols[2];
+    int activeScreenMenu = -1;/**< the actual displayed menu*/
+    unsigned long nextEscBack = 0;/**< move screen back using esc control */
     int totalScreenMenus = 0;/**< total amount of displayable/showAble display menus*/
     unsigned int screenMenuOptions = displayMenuOptionsDefault;/**< menuoptions to be displayed */
     screenMenu *pantalles[screenMenuMax];/**< pointers to  display menus*/
@@ -159,6 +161,7 @@ class menu : public terminalParser{
     void refresh();/**< to force screen refresh */
     void doBack();/**< sets the display to the previous one*/
     void show(bool resetCursor = true);/**< draws menu on screen  */
+    void queryTerminalSize();
 };
 
 extern menu menuSystemOverTty;

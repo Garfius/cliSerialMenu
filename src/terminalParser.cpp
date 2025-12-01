@@ -2,10 +2,6 @@
 /**
 * @file terminalParser.cpp
 * @brief Inheritable byte-by-byte string parser state machine.
-* Comportament putty:
-* Cursor mou cursor
-* cr <-- torna el carrier a inici
-* Si escrius l'últim caràcter de la pantalla, el cursor es queda allà, saltará al seguent input
 * 
 * @author Gerard Forcada Bigas
 *
@@ -13,7 +9,7 @@
 */
 
 /*
-Coses falten per parsejar
+Coses falten per parsejar TO-DO
 insert = 1B5B327E
 ctrl dret = 1B4F43 ctrl esq = 1B4F44
 insert = 1B5B327E
@@ -98,7 +94,6 @@ void terminalParser::cUB(unsigned int argc,int *argv){}
 void terminalParser::cUF(unsigned int argc,int *argv){}
 void terminalParser::sGR(unsigned int argc,int *argv){}
 void terminalParser::dSR(unsigned int argc,int *argv){}
-//void terminalParser::cPR(unsigned int argc,int *argv){}
 void terminalParser::rM(unsigned int argc,int *argv){}
 void terminalParser::sM(unsigned int argc,int *argv){}
 void terminalParser::dA(unsigned int argc,int *argv){}
@@ -116,6 +111,7 @@ void terminalParser::lf(){}
 void terminalParser::beep(){}
 void terminalParser::cr(){}
 void terminalParser::del(){}
+void terminalParser::cPR(unsigned int argc,int *argv){}
 void terminalParser::insert(bool setDisplayInsert){
     insertStatus = !insertStatus;
    if(setDisplayInsert){
@@ -335,11 +331,6 @@ bool terminalParser::doGuess(char caracter){// do the thing, and guess(return) i
             _parsejaUnNumero();
             this->dSR(indexllistaNumeros,llistaNumeros);
         }
-        /*else if (caracter == CPR)
-        {// fer color invers
-            _parsejaUnNumero();
-            this->cPR(indexllistaNumeros,llistaNumeros);
-        }*/
         else if (caracter == RM)
         {
             _parsejaUnNumero();
@@ -379,11 +370,11 @@ bool terminalParser::doGuess(char caracter){// do the thing, and guess(return) i
         {
             _parsejaUnNumero();
             this->dCH(indexllistaNumeros,llistaNumeros);// to-do executa funcio? no, és de capa 
-        }/*else if (caracter == CPR)
+        }else if (caracter == CPR)
         {
             _parsejaUnNumero();
             this->cPR(indexllistaNumeros,llistaNumeros);// to-do executa funcio? no, és de capa 
-        }*/
+        }
         
         else if (caracter == VPA)
         {
