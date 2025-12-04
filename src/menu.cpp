@@ -37,16 +37,30 @@ void menu::init(Stream *userSerialTerminal){
     terminalParser::init(userSerialTerminal);
     if(totalScreenMenus < 1)return;// comentar?
     setscreen(0);
+    queryTerminalSize();
+    unsigned int start = millis();
+    while(terminalRowsCols[0] == 0){// esperar a que respongui
+        if((millis()-start) > queryterminalSizeTimeout)break;
+        run();
+        delay(10);
+    }
     show();
 }
 /**
  * refresca la linia
 */
 void menu::show(unsigned int index){
+    screenMenu *active = pantalles[activeScreenMenu];
+    unsigned int displayIndex = index + active->offsetFromTop;
+    unsigned int targetRow = contentOriginRow + 1 + index;
+
+    doMoveCursor(targetRow, contentOriginCol);
     doEL();
-    userTty->write('-');
-    userTty->print(pantalles[activeScreenMenu]->displayMenuOptionsPnt[index+pantalles[activeScreenMenu]->offsetFromTop]->text);
-    userTty->write('\r');
+    if(displayIndex < active->totalMenuOptions){
+        userTty->write('-');
+        userTty->print(active->displayMenuOptionsPnt[displayIndex]->text);
+    }
+    doMoveCursor(contentOriginRow + 1 + selectedMenuOption, contentOriginCol);
     userTty->flush();
 }
 /**
@@ -56,37 +70,87 @@ Show menu on screen, using userTty object member
 */
 void menu::show(bool resetCursor){
     if(totalScreenMenus == 0)return;// safe
-    
-    unsigned int tmp;// quants has d'imprimir
-    
-    this->doClearScreen();
-    this->doMoveCursor(1,1);
-    userTty->write(inverteixColorsTerminal);
-    userTty->print(this->pantalles[activeScreenMenu]->titol);
-    
-    if(pantalles[activeScreenMenu]->totalMenuOptions < screenMenuOptions){
-        tmp = pantalles[activeScreenMenu]->totalMenuOptions;// 4
-    }else{
-        tmp = screenMenuOptions;// 3
+
+    screenMenu *active = pantalles[activeScreenMenu];
+    unsigned int visibleOptions = active->totalMenuOptions < screenMenuOptions ? active->totalMenuOptions : screenMenuOptions;
+    unsigned int headerLen = strlen(active->titol);
+
+    if(active->hasMoreAbove){
+        headerLen += strlen(msgOptionsUp);
     }
-    if(pantalles[activeScreenMenu]->hasMoreAbove){
+    if(active->hasMoreBelow){
+        headerLen += strlen(msgOptionsDn);
+    }
+
+    unsigned int maxOptionLen = 0;
+    for(unsigned int i = 0; i < visibleOptions; ++i){
+        unsigned int idx = i + active->offsetFromTop;
+        if(idx >= active->totalMenuOptions)break;
+        unsigned int optionLen = 1 + strlen(active->displayMenuOptionsPnt[idx]->text);
+        if(optionLen > maxOptionLen){
+            maxOptionLen = optionLen;
+        }
+    }
+
+    unsigned int contentWidth = maxOptionLen;
+    if(contentWidth == 0){
+        contentWidth = 1;
+    }
+
+    unsigned int contentHeight = 1 + visibleOptions;
+
+    if(terminalRowsCols[0] > 0 && terminalRowsCols[0] > contentHeight){
+        unsigned int topPadding = (terminalRowsCols[0] - contentHeight) / 2;
+        contentOriginRow = 1 + topPadding;
+    }else{
+        contentOriginRow = 1;
+    }
+
+    if(terminalRowsCols[1] > 0 && terminalRowsCols[1] > contentWidth){
+        unsigned int leftPadding = (terminalRowsCols[1] - contentWidth) / 2;
+        contentOriginCol = 1 + leftPadding;
+    }else{
+        contentOriginCol = 1;
+    }
+
+    // Calculate header position: center it relative to options if narrower, otherwise align left
+    unsigned int headerStartCol = contentOriginCol;
+    if(terminalRowsCols[1] > 0 && headerLen > contentWidth){
+        headerStartCol = (terminalRowsCols[1] - headerLen) / 2;
+    }
+
+    this->doClearScreen();
+    this->doMoveCursor(contentOriginRow, headerStartCol);
+    userTty->write(inverteixColorsTerminal);
+    userTty->print(active->titol);
+    if(active->hasMoreAbove){
         userTty->print(msgOptionsUp);
     }
-    if(pantalles[activeScreenMenu]->hasMoreBelow){
+    if(active->hasMoreBelow){
         userTty->print(msgOptionsDn);
     }
-    userTty->write(colorsTerminalReset);//for(unsigned int i=offsetFromTop;i < (menuSystemOverTtyP->screenMenuOptions+offsetFromTop);i++){  
-    for(unsigned int i=0;i< tmp ;i++){
-        if(i >= screenMenuOptions)break;
-        this->doMoveCursor(2+i,1);
+    userTty->write(colorsTerminalReset);
+
+    for(unsigned int i = 0; i < visibleOptions; ++i){
+        unsigned int idx = i + active->offsetFromTop;
+        if(idx >= active->totalMenuOptions)break;
+        this->doMoveCursor(contentOriginRow + 1 + i, contentOriginCol);
         userTty->write('-');
-        userTty->print(pantalles[activeScreenMenu]->displayMenuOptionsPnt[i+pantalles[activeScreenMenu]->offsetFromTop]->text);
+        userTty->print(active->displayMenuOptionsPnt[idx]->text);
     }
-    
+
     if(resetCursor){
         selectedMenuOption = 0;
     }
-    doMoveCursor(2+selectedMenuOption,1);
+
+    if(visibleOptions > 0){
+        if(selectedMenuOption >= visibleOptions){
+            selectedMenuOption = visibleOptions - 1;
+        }
+        doMoveCursor(contentOriginRow + 1 + selectedMenuOption, contentOriginCol);
+    }else{
+        doMoveCursor(contentOriginRow, contentOriginCol);
+    }
     userTty->flush();
 }
 /**
@@ -99,7 +163,7 @@ void menu::cUU(unsigned int argc,int *argv){// keyUp
         return;
     }
     selectedMenuOption--;
-    doMoveCursor(2+selectedMenuOption,1);
+    doMoveCursor(contentOriginRow + 1 + selectedMenuOption,contentOriginCol);
     terminalParser::cUU(argc,argv);
 }
 /**
@@ -116,7 +180,7 @@ void menu::cUD(unsigned int argc,int *argv){// keyDn
         return;
     }
     selectedMenuOption++;
-    doMoveCursor(2+selectedMenuOption,1);
+    doMoveCursor(contentOriginRow + 1 + selectedMenuOption,contentOriginCol);
     terminalParser::cUD(argc,argv);
 }
 void menu::cUF(unsigned int argc,int *argv){

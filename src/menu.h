@@ -35,6 +35,8 @@
 
 #define menuTextLength (menuTextArrayLength-1)
 
+#define queryterminalSizeTimeout 1000UL /**< milliseconds to wait for terminal size report */
+
 static const char * msgOptionsUp = " Up!";
 static const char * msgOptionsDn = " Dn!";
 
@@ -130,6 +132,8 @@ class menu : public terminalParser{
     unsigned int selectedMenuOption;/**< the actual selected menu index option on display*/
     unsigned long nextRefresh = 0;/**< screen refresh control*/
     bool runningOption = false;/**< esta excutant una opcio */
+    unsigned int contentOriginRow = 1;/**< top row where the menu content starts */
+    unsigned int contentOriginCol = 1;/**< left column where the menu content starts */
     void show(unsigned int index);/**< redraws selected menuoption text */
     virtual void cUU(unsigned int argc,int *argv);/**< inherited from terminalParser. cursor Dn handler */
     virtual void cUD(unsigned int argc,int *argv);/**< inherited from terminalParser. cursor Up handler */
@@ -138,7 +142,7 @@ class menu : public terminalParser{
     virtual void cPR(unsigned int argc,int *argv);/**< inherited from terminalParser. cursor position report*/
     virtual void cr();/**< inherited from terminalParser. enter */
   public:
-    unsigned int terminalRowsCols[2];
+    unsigned int terminalRowsCols[2] = {0, 0};/** reported size rows and cols, 0 means not initialized*/
     int activeScreenMenu = -1;/**< the actual displayed menu*/
     unsigned long nextEscBack = 0;/**< move screen back using esc control */
     int totalScreenMenus = 0;/**< total amount of displayable/showAble display menus*/
