@@ -1,141 +1,234 @@
+#include <Arduino.h>
 #include <menu.h>
-#include <Servo.h>
-/**
- * To be used with vt100 compatible terminal consoles like Putty, screen(linux) or TeraTerm(Windows) DO NOT USE Arduino IDE serialPortUsed MONITOR. 
- * 
- * Here 4 menu options are shown, the first automaticaly changes when the motion detection pin state changes
- * You might move the servos connected at the setvo 1 pin and servo 2 pin using right and left arrows at the menu option
- * The last option is to show user interface capabilities like text prompt, alert messaging...
- * Use the arrows to navigate
- * 
- * Arduino Menu System demo2
- * -Idle                          <---- Shows automatic refresh capability
- * -Move servo 1:90               <---- Move a servo
- * -Move servo 2:90               <---- Move a servo
- * -Show menu UI capabilities     <---- Use UI stuff
-
-*/
-//------------------------------------CONFIGURATION START------------------------------------
+#define inputPin 20
 #define serialPortUsed Serial// Choose your Serial port
-#define baudRateUsed 9600// Choose your baud rate speed
-
-#define motionDetectPin 2 // Choose your PIR pin
-#define servo1Pin 10 // Choose Servo 1 pin
-#define servo2Pin 11 // Choose Servo 2 pin
-//------------------------------------CONFIGURATION END------------------------------------
-Servo myServo1;
-Servo myServo2;
-bool motionDetectStatus = false;
-
-static const char * dummyMessage = "Do something here";
-static const char * noMotion = "Idle";
-static const char * motion = "Motion detected";
-class testUiStuff : public menuOption{
+char allowedChars[86] = 
+    "0123456789" 
+    "abcdefghij" 
+    "klmnopqrst" 
+    "uvwxyzABCD"
+    "EFGHIJKLMN" 
+    "OPQRSTUVWX" 
+    "YZ.-:+=^!/" 
+    "*?&<>()\\;," 
+    " @%$#";
+class resizer : public menuOption{
   public:
-    testUiStuff() :menuOption("Show menu UI capabilities"){}
+    resizer() :menuOption("Change menu length"){}
     void run(){
-      char myText[menuTextArrayLength];
-      String tmpStr = "Previous text";
+      char myText[15];
+      String tmpStr = (String)menuSystemOverTty.screenMenuOptions;
       strcpy(myText,tmpStr.c_str());
-      if(menuSystemOverTty.msgYes("(this is a msgYes)Do you really want to see my UI capabilities?")){
-        menuSystemOverTty.msgSmallWait("(this is a smallWait)Here we go!");
-        if(menuSystemOverTty.msgTxtInputSimple("(this is a msgTxtInputSimple)Enter a text:",myText,(menuTextArrayLength-1),1)){  
-          menuSystemOverTty.userTty->println("(this will be a msgPause with text)You just wrote:");
-          menuSystemOverTty.msgPause(myText);
-        }else{
-          menuSystemOverTty.msgPause("aborted");
+      menuSystemOverTty.msgSmallWait("Here comes a msgTxtInput");
+      if(menuSystemOverTty.msgTxtInput("Change Screen Menu Options:",myText,3,1)){
+        tmpStr = (String)myText;
+        unsigned int tmpInt = (unsigned int)tmpStr.toInt();
+        if((tmpInt <= menuOptionsMax) && (tmpInt > 0)){
+          tmpStr = (String)"New value="+(String)tmpInt;
+          strcpy(myText,tmpStr.c_str());
+          menuSystemOverTty.msgSmallWait(myText);
+          if(menuSystemOverTty.msgYes("U sure?")){
+            menuSystemOverTty.screenMenuOptions = tmpInt;
+            menuSystemOverTty.setscreen(0,false);
+          }
+          return;
         }
-        menuSystemOverTty.userTty->println("(this will be a msgPause no text)And so this is it, bye");
-        menuSystemOverTty.msgPause();
       }
+      menuSystemOverTty.msgSmallWait("Wrong value");
     }
 };
-class testOption1 : public menuOption{
-  protected:
-    bool lastState;
+class configurer : public menuOption{
+    void printDescription(){
+      String menuConfigDescription = (String)"verticallyCenter:"+(String)menuSystemOverTtyP->verticallyCenter+(String)" horizontallyCenter:"+(String)menuSystemOverTtyP->horizontallyCenter+(String)" textLineWidth:"+(String)menuSystemOverTtyP->textLineWidth+(String)" Columns:"+(String)menuSystemOverTtyP->terminalRowsCols[1]+(String)" Rows:"+(String)menuSystemOverTtyP->terminalRowsCols[0]+(String)" askTerminalSize:"+(String)menuSystemOverTtyP->askTerminalSize+" Menu padding: "+(String)menuSystemOverTtyP->_topPadding;
+      menuSystemOverTtyP->msgPause(menuConfigDescription.c_str());
+    }
   public:
-        testOption1():menuOption(noMotion){
-          lastState = motionDetectStatus;
+    configurer() :menuOption("Change menu beheaviour"){}
+    void run(){
+      printDescription();
+      if(menuSystemOverTtyP->msgYes("clear terminal size?")){
+        menuSystemOverTtyP->terminalRowsCols[0] = 0;
+        menuSystemOverTtyP->terminalRowsCols[1] = 0;
+        menuSystemOverTtyP->terminalSizeQueries = 0;
+        return;
+      }
+      menuSystemOverTtyP->askTerminalSize = menuSystemOverTtyP->msgYes("keep asking for terminal size?");
+      menuSystemOverTtyP->verticallyCenter = menuSystemOverTtyP->msgYes("Center verticaly?");
+      menuSystemOverTtyP->horizontallyCenter = menuSystemOverTtyP->msgYes("Center horizontally?");
+      char myText[15];
+      String tmpStr = (String)menuSystemOverTty._topPadding;
+      strcpy(myText,tmpStr.c_str());
+      menuSystemOverTtyP->msgSmallWait("this is single line text input msgTxtInput");
+      if(menuSystemOverTty.msgTxtInput("Set menu top padding:",myText,3,1)){
+        tmpStr = (String)myText;
+        unsigned int tmpInt = (unsigned int)tmpStr.toInt();
+        if((tmpInt <= menuOptionsMax) && (tmpInt > 0)){
+          tmpStr = (String)"New value="+(String)tmpInt;
+          strcpy(myText,tmpStr.c_str());
+          menuSystemOverTty.msgSmallWait(myText);
+          menuSystemOverTty._topPadding = tmpInt;
+        }else{
+          menuSystemOverTty.msgSmallWait("error");
         }
+      }else{
+        menuSystemOverTty.msgSmallWait("Wrong value");
+      }
+      printDescription();
+    }
+};
+class rangeShow : public menuOptionRangeValue{
+  public:
+        rangeShow():menuOptionRangeValue("Select text input line width",minTextBoxWidth,80,defaultTextBoxWidth,2){}
         void run(){
-          menuSystemOverTty.msgSmallWait(dummyMessage);
-          menuSystemOverTty.msgPause();
-        }
-        bool refresh(){
-          if(lastState != motionDetectStatus){
-            lastState = motionDetectStatus;
-            if(motionDetectStatus){
-              strcpy(text, motion);
-            }else{
-              strcpy(text, noMotion);
+            String tmpStr = "Value set to:"+(String)state;
+            if(menuSystemOverTtyP->msgYes(tmpStr.c_str())){  
+              menuSystemOverTtyP->textLineWidth = state;
+              menuSystemOverTtyP->msgSmallWait("ok");
             }
-            return true;
-          }
-          return false;
+            menuSystemOverTtyP->msgPause();
         }
+        //bool refresh(){} not used, not need to do anything when refreshing
 };
-
-class testOption3 : public menuOptionRangeValue{
-  protected:
-    
+class scrollMenuOption: public menuOption{
+  unsigned int _myIndex;
   public:
-        testOption3():menuOptionRangeValue("Move servo 1",0,180,90,7){}
-        void run(){
-          menuSystemOverTty.msgPause(dummyMessage);
-        }
-        bool refresh(){
-          if(menuOptionRangeValue::refresh()){// have the value changed?
-            myServo1.write(state);
-            return true;
-          }
-          return false;
-        }
+    scrollMenuOption(){};
+    scrollMenuOption(const char* text,unsigned int myIndex):menuOption(text){
+      _myIndex = myIndex;
+    }
+  void run(){
+    menuSystemOverTty.userTty->print("You just ran index:");
+    menuSystemOverTty.printLnCentered(_myIndex);
+    menuSystemOverTty.msgPause();
+  }
 };
-class testOption4 : public menuOptionRangeValue{
+static const char * myScrollingMenuCaption = "A dyn-generated scrolling menu";
+class myScrollingMenu :public  screenMenu{
   protected:
+    static const unsigned int maxValue = 16;
+    unsigned int downValue =0;
+    scrollMenuOption menuOptions[menuOptionsMax];// use displayMenuOptionsDefault to cheap memory on static size menu
+  public: 
+    myScrollingMenu():screenMenu(myScrollingMenuCaption){
+    }
+    bool refreshMenu() override{
+      // chack wether display 
+      if(totalMenuOptions!= menuSystemOverTty.screenMenuOptions)totalMenuOptions = menuSystemOverTty.screenMenuOptions;
+
+      String tmpStr = (String)myScrollingMenuCaption;
+      if(downValue > 0){
+        tmpStr += (String)msgOptionsUp;
+      }
+      if((downValue+menuSystemOverTty.screenMenuOptions) <= maxValue){
+        tmpStr += (String)msgOptionsDn;
+      }
+
+      strcpy(titol,tmpStr.c_str());
+      for (unsigned int i = 0; i < totalMenuOptions; i++)
+      {
+          tmpStr = "This is menuItem "+(String)(downValue+i);// using arduino string manipulation is da best
+          menuOptions[i] = scrollMenuOption(tmpStr.c_str(),(downValue+i));
+          menuOptions[i].autoRefresh = false;
+          displayMenuOptionsPnt[i] = &menuOptions[i]; // flipada, admet punters de sobrecàrregues ? SI!
+      }
+      //return screenMenu::refreshMenu();
+      return false;
+    }
+    void leave() override{
+      //downValue =0;
+      strcpy(titol,myScrollingMenuCaption);
+    }
+    bool pushUp() override{
+      if(downValue > 0){
+        downValue--;
+        refreshMenu();
+        return true;
+      }
+      return false;
+    }
+    bool pushDn() override{
+      if((downValue+menuSystemOverTty.screenMenuOptions) <= maxValue){
+        downValue++;
+        refreshMenu();
+        return true;
+      }
+      return false;
+    }
+};
+class textBoxDemoMenuOption : public textBoxMenuOption{
+  static const int textBoxDemoArraySize = 340;
   public:
-        testOption4():menuOptionRangeValue("Move servo 2",0,180,90,7){}
-        void run(){
-          menuSystemOverTty.msgPause(dummyMessage);
-          
+        textBoxDemoMenuOption():textBoxMenuOption("Multiline text Box input demo"){}
+        bool checkBackgroundEvents() override{
+            return digitalRead(inputPin) == HIGH;
         }
-        bool refresh(){
-          if(menuOptionRangeValue::refresh()){// have the value changed?
-            myServo2.write(state);
-            return true;
-          }
-          return false;
+        bool performUserInteraction() override{
+            menuSystemOverTtyP->msgPause("physical button pushed");
+            return digitalRead(inputPin) == HIGH;
+        }
+        void run(){
+          textBoxMenuOption::run();// <-- IMPORTANT !!
+            char result[textBoxDemoArraySize];
+            strcpy(result,"And so that no one else may be blamed if errors are found in this work, I, Johanot Martorell, knight, alone wish to bear the responsibility...");
+            menuSystemOverTty.msgTxtInputMultiline(result,textBoxDemoArraySize-1,1,allowedChars);
+            if(menuSystemOverTty._textBoxStatus == textBoxStatus::enterPressed){
+                menuSystemOverTty.userTty->print("You wrote and enter:");
+                menuSystemOverTty.printLnCentered(result);
+            }else if(menuSystemOverTty._textBoxStatus == textBoxStatus::escPressed){
+              menuSystemOverTty.userTty->print("Esc pressed:");
+              menuSystemOverTty.printLnCentered(result);
+            }else if(menuSystemOverTty._textBoxStatus == textBoxStatus::softwareAborted){
+              menuSystemOverTty.userTty->print("Software aborted:");
+              menuSystemOverTty.printLnCentered(result);
+            }else if(menuSystemOverTty._textBoxStatus == textBoxStatus::activeEditor){
+              menuSystemOverTty.userTty->print("----SHIT1---:");
+              menuSystemOverTty.printLnCentered(result);
+            }else if(menuSystemOverTty._textBoxStatus == textBoxStatus::noExit){
+              menuSystemOverTty.userTty->print("----SHIT2---:");
+              menuSystemOverTty.printLnCentered(result);
+            }else if(menuSystemOverTty._textBoxStatus == textBoxStatus::error){
+              menuSystemOverTty.userTty->print("Error");
+              menuSystemOverTty.printLnCentered(result);
+            }else{
+                menuSystemOverTty.userTty->print("----SHIT3---:");
+                menuSystemOverTty.printLnCentered(result);
+            }
+            String tmpStr = "Exit code:"+(String)menuSystemOverTty.lastTextBoxExitCode;
+            menuSystemOverTty.setPrettyDotLeadersMargin(20);
+            menuSystemOverTty.printDotLeaders(tmpStr.c_str(),menuTextBox::exitCodeDescription[menuSystemOverTty.lastTextBoxExitCode]);
+            menuSystemOverTty.msgPause();
         }
 };
-
-testOption1 firstMenuItem = testOption1();
-testOption3 ThirdMenuItem = testOption3();
-testOption4 fourthMenuItem = testOption4();
-testUiStuff secondMenuItem = testUiStuff();
-screenMenu utilitats = screenMenu("Arduino Menu System demo2");
-
-void motionDetectStateChange(){
-  motionDetectStatus = digitalRead(motionDetectPin);
-}
+//--------Screen menus instances
+screenMenu myOptionSelector = screenMenu("Arduino Menu System demo1");
+myScrollingMenu scrolling = myScrollingMenu();
+//--------menu options instances
+rangeShow firstMenuItem = rangeShow();
+changeScreenMenuOption thirdMenuOption = changeScreenMenuOption(&scrolling);// cast is needed bc inheritance
+resizer fifthMenuOptyion = resizer();
+configurer sixtMenuOptyion = configurer();
+textBoxDemoMenuOption notepat = textBoxDemoMenuOption();
 void setup() {
-  serialPortUsed.begin(baudRateUsed);
+  //hardware init
+  serialPortUsed.begin(9600);
   while (!serialPortUsed) {;}
-  myServo1.attach(servo1Pin);
-  myServo2.attach(servo2Pin);
-  pinMode(motionDetectPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(motionDetectPin), motionDetectStateChange, CHANGE);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+  pinMode(inputPin, INPUT);
   
-  menuSystemOverTty.addscreen(&utilitats);
-  utilitats.addMenuOption(&firstMenuItem);// the order goes here
-  utilitats.addMenuOption(&ThirdMenuItem);
-  utilitats.addMenuOption(&fourthMenuItem);
-  utilitats.addMenuOption(&secondMenuItem);
-  utilitats.autoRefresh = true;
-  
-  menuSystemOverTty.init(&serialPortUsed);// requiered at boot
+  //build menu structure
+  menuSystemOverTty.addscreen(&myOptionSelector);
+  menuSystemOverTty.addscreen(&scrolling);
+  myOptionSelector.addMenuOption(&firstMenuItem);// the order goes here
+  myOptionSelector.addMenuOption(&thirdMenuOption);
+  myOptionSelector.addMenuOption(&fifthMenuOptyion);
+  myOptionSelector.addMenuOption(&sixtMenuOptyion);
+  myOptionSelector.addMenuOption(&notepat);
+
+  //menu init
+  menuSystemOverTty.init(&serialPortUsed);// requiered at boot 
 }
 
 void loop() {
   menuSystemOverTty.run();
 }
-

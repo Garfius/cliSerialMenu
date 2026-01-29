@@ -1,173 +1,123 @@
+#include <Arduino.h>
 #include <menu.h>
-/**
- * 
- * To be used with vt100 compatible terminal consoles like Putty, screen(linux) or TeraTerm(Windows) DO NOT USE Arduino IDE SERIAL MONITOR. 
- * 
- * Here you can use 4 menu options at the main screen menu, plus a second screen menu which is dynamically generated.
- * Use the arrows to navigate
- * 
- * Arduino Menu System demo1
- * -Select value:50                   <---- Slider menuOption demo
- * -Board LED:OFF                     <---- Switch menuOption demo
- * -A dyn-generated scrolling menu    <---- Jump to secondary screen menu which is dynamically generated
- * -Change menu length                <---- You might set the amount of displayed menu options
- *
-*/
-//------------------------------------CONFIGURATION START------------------------------------
+#include <Servo.h>
+#define motionDetectPin 2// PIR sensor
+#define servo1Pin 10
+#define servo2Pin 11
 #define serialPortUsed Serial// Choose your Serial port
-#define baudRateUsed 9600// Choose your baud rate speed
-//------------------------------------CONFIGURATION END------------------------------------
-class resizer : public menuOption{
+Servo myServo1;
+Servo myServo2;
+bool motionDetectStatus = false;
+
+static const char * dummyMessage = "Do something here";
+static const char * noMotion = "Idle";
+static const char * motion = "Motion detected";
+class testUiStuff : public menuOption{
   public:
-    resizer() :menuOption("Change menu length"){}
+    testUiStuff() :menuOption("Show menu UI capabilities"){}
     void run(){
-      char myText[15];
-      String tmpStr = (String)menuSystemOverTty.screenMenuOptions;
+      char myText[menuTextArrayLength];
+      String tmpStr = "Previous text";
       strcpy(myText,tmpStr.c_str());
-      if(menuSystemOverTty.msgTxtInputSimple("Change Screen Menu Options:",myText,3,1)){
-        tmpStr = (String)myText;
-        unsigned int tmpInt = (unsigned int)tmpStr.toInt();
-        if((tmpInt <= menuOptionsMax) && (tmpInt > 0)){
-          tmpStr = (String)"New value="+(String)tmpInt;
-          strcpy(myText,tmpStr.c_str());
-          menuSystemOverTty.msgSmallWait(myText);
-          if(menuSystemOverTty.msgYes("U sure?")){
-            menuSystemOverTty.screenMenuOptions = tmpInt;
-            menuSystemOverTty.setscreen(0,false);
-          }
-          return;
+      if(menuSystemOverTty.msgYes("(this is a msgYes)Do you really want to see my UI capabilities?")){
+        menuSystemOverTty.msgSmallWait("(this is a smallWait)Here we go!");
+        if(menuSystemOverTty.msgTxtInput("(this is a msgTxtInputSimple)Enter a text:",myText,(menuTextArrayLength-1),1)){  
+          menuSystemOverTty.userTty->println("(this will be a msgPause with text)You just wrote:");
+          menuSystemOverTty.msgPause(myText);
+        }else{
+          menuSystemOverTty.msgPause("aborted");
         }
+        menuSystemOverTty.userTty->println("(this will be a msgPause no text)And so this is it, bye");
+        menuSystemOverTty.msgPause();
       }
-      menuSystemOverTty.msgSmallWait("Wrong value");
     }
 };
-class rangeShow : public menuOptionRangeValue{
+class testOption1 : public menuOption{
+  protected:
+    bool lastState;
   public:
-        rangeShow():menuOptionRangeValue("Select value",0,100,50){}
-        void run(){
-            menuSystemOverTty.userTty->print("Here do something with");
-            menuSystemOverTty.userTty->println(state);
-            menuSystemOverTty.msgPause();
+        testOption1():menuOption(noMotion){
+          lastState = motionDetectStatus;
         }
-        //bool refresh(){} not used, not need to do anything when refreshing
-};
-class onboardLedShow : public menuOptionOnOff{
-  public:
-        onboardLedShow():menuOptionOnOff("Board LED"){}
         void run(){
-          menuSystemOverTty.userTty->print("The led is ");
-          if(state){
-            menuSystemOverTty.userTty->println("ON");
-          }else{
-            menuSystemOverTty.userTty->println("OFF");
-          }
+          menuSystemOverTty.msgSmallWait(dummyMessage);
           menuSystemOverTty.msgPause();
         }
         bool refresh(){
-          if(menuOptionOnOff::refresh()){
-            if(state){
-              digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
+          if(lastState != motionDetectStatus){
+            lastState = motionDetectStatus;
+            if(motionDetectStatus){
+              strcpy(text, motion);
             }else{
-              digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
+              strcpy(text, noMotion);
             }
             return true;
           }
           return false;
         }
 };
-class scrollMenuOption: public menuOption{
-  unsigned int _myIndex;
-  public:
-    scrollMenuOption(){};
-    scrollMenuOption(const char* text,unsigned int myIndex):menuOption(text){
-      _myIndex = myIndex;
-    }
-  void run(){
-    menuSystemOverTty.userTty->print("You just ran index:");
-    menuSystemOverTty.userTty->println(_myIndex);
-    menuSystemOverTty.msgPause();
-  }
-};
-static const char * myScrollingMenuCaption = "A dyn-generated scrolling menu";
-class myScrollingMenu :public  screenMenu{
+
+class testOption3 : public menuOptionRangeValue{
   protected:
-    static const unsigned int maxValue = 16;
-    unsigned int downValue =0;
-    scrollMenuOption menuOptions[menuOptionsMax];// use displayMenuOptionsDefault to cheap memory on static size menu
-  public: 
-    myScrollingMenu():screenMenu(myScrollingMenuCaption){
-    }
-    bool refreshMenu(){
-      // chack wether display 
-      if(totalMenuOptions!= menuSystemOverTty.screenMenuOptions)totalMenuOptions = menuSystemOverTty.screenMenuOptions;
-
-      String tmpStr = (String)myScrollingMenuCaption;
-      if(downValue > 0){
-        tmpStr += (String)msgOptionsUp;
-      }
-      if((downValue+menuSystemOverTty.screenMenuOptions) <= maxValue){
-        tmpStr += (String)msgOptionsDn;
-      }
-
-      strcpy(titol,tmpStr.c_str());
-      for (unsigned int i = 0; i < totalMenuOptions; i++)
-      {
-          tmpStr = "This is menuItem "+(String)(downValue+i);// using arduino string manipulation is da best
-          menuOptions[i] = scrollMenuOption(tmpStr.c_str(),(downValue+i));
-          menuOptions[i].autoRefresh = false;
-          displayMenuOptionsPnt[i] = &menuOptions[i]; // flipada, admet punters de sobrecàrregues ? SI!
-      }
-      //return screenMenu::refreshMenu();
-      return false;
-    }
-    void bye(){
-      downValue =0;
-      strcpy(titol,myScrollingMenuCaption);
-    }
-    bool pushUp(){// to-do
-      if(downValue > 0){
-        downValue--;
-        refreshMenu();
-        return true;
-      }
-      return false;
-    }
-    bool pushDn(){
-      if((downValue+menuSystemOverTty.screenMenuOptions) <= maxValue){
-        downValue++;
-        refreshMenu();
-        return true;
-      }
-      return false;
-    }
+    
+  public:
+        testOption3():menuOptionRangeValue("Move servo 1",0,180,90,7){}
+        void run(){
+          menuSystemOverTty.msgPause(dummyMessage);
+        }
+        bool refresh(){
+          if(menuOptionRangeValue::refresh()){// have the value changed?
+            myServo1.write(state);
+            return true;
+          }
+          return false;
+        }
 };
-//--------Screen menus instances
-screenMenu utilitats = screenMenu("Arduino Menu System demo1");
-myScrollingMenu scrolling = myScrollingMenu();
-//--------menu options instances
-rangeShow firstMenuItem = rangeShow();
-onboardLedShow secondMenuItem = onboardLedShow();
-changeScreenMenuOption thirdMenuOption = changeScreenMenuOption(&scrolling);// cast is needed bc inheritance
-resizer fifthMenuOptyion = resizer();
-void setup() {
-  //hardware init
-  serialPortUsed.begin(baudRateUsed);
-  while (!serialPortUsed) {;}
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW); 
-  
-  //build menu structure
-  menuSystemOverTty.addscreen(&utilitats);
-  menuSystemOverTty.addscreen(&scrolling);
-  utilitats.addMenuOption(&firstMenuItem);// the order goes here
-  utilitats.addMenuOption(&secondMenuItem);
-  utilitats.addMenuOption(&thirdMenuOption);
-  utilitats.addMenuOption(&fifthMenuOptyion);
+class testOption4 : public menuOptionRangeValue{
+  protected:
+  public:
+        testOption4():menuOptionRangeValue("Move servo 2",0,180,90,7){}
+        void run(){
+          menuSystemOverTty.msgPause(dummyMessage);
+          
+        }
+        bool refresh(){
+          if(menuOptionRangeValue::refresh()){// have the value changed?
+            myServo2.write(state);
+            return true;
+          }
+          return false;
+        }
+};
 
-  //menu init
-  menuSystemOverTty.init(&serialPortUsed);// requiered at boot 
+testOption1 firstMenuItem = testOption1();
+testOption3 ThirdMenuItem = testOption3();
+testOption4 fourthMenuItem = testOption4();
+testUiStuff secondMenuItem = testUiStuff();
+screenMenu utilitats = screenMenu("Arduino Menu System demo2");
+
+void motionDetectStateChange(){
+  motionDetectStatus = digitalRead(motionDetectPin);
+}
+void setup() {
+  Serial.begin(9600);
+  while (!Serial) {;}
+  myServo1.attach(servo1Pin);
+  myServo2.attach(servo2Pin);
+  pinMode(motionDetectPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(motionDetectPin), motionDetectStateChange, CHANGE);
+  
+  menuSystemOverTty.addscreen(&utilitats);
+  utilitats.addMenuOption(&firstMenuItem);// the order goes here
+  utilitats.addMenuOption(&ThirdMenuItem);
+  utilitats.addMenuOption(&fourthMenuItem);
+  utilitats.addMenuOption(&secondMenuItem);
+  utilitats.autoRefresh = true;
+  
+  menuSystemOverTty.init(&Serial);// requiered at boot
 }
 
 void loop() {
   menuSystemOverTty.run();
 }
+
