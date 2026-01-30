@@ -237,9 +237,11 @@ if coming from a run, no need to call show();
 @param pantallaDesti where to go
 */
 void menu::setscreen(int pantallaDesti,bool setWhereICame){
-    if(activeScreenMenu > -1)pantalles[activeScreenMenu]->leave();
+    if(activeScreenMenu > -1){
+        pantalles[activeScreenMenu]->leave();
+        pantalles[activeScreenMenu]->lastSelectedMenuOptionIndex = selectedMenuOption;
+    }
     if(setWhereICame)pantalles[pantallaDesti]->whereICame = activeScreenMenu;
-    pantalles[activeScreenMenu]->lastSelectedMenuOptionIndex = selectedMenuOption;
     activeScreenMenu = pantallaDesti;
     pantalles[activeScreenMenu]->refreshMenu();
     pantalles[activeScreenMenu]->setHasMores();
