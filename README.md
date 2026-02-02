@@ -23,7 +23,13 @@ void loop() {
 
 ## Compatible Hardware
 
-Tested on ATMega328p(Arduino nano) and RP2040(Raspberry pi pico-maxgerhardt/earlephilhower-platformio)
+Tested on ATMega328p(Arduino nano) and RP2040(Raspberry pi pico-maxgerhardt/earlephilhower-platformio) and ESP32
+
+***To use with low memory boards(ATMega328...):***
+Comment at menu.h line 20
+```c++
+#define _MENU_UI_BIG_RAM_
+```
 
 **NOTES**:
  * Be aware of text captions text(char *) length, must be shorter than menuTextArrayLength(menu.h), might corrupt memory!
@@ -34,8 +40,6 @@ Tested on ATMega328p(Arduino nano) and RP2040(Raspberry pi pico-maxgerhardt/earl
 I ran DoxyGen, so, here it is:
 
 Best is html(must clone) docs/html/index.html
-
-![panDoc to markdown](/docs/mdPandoc/index.md)
 
 ![moxygen translated](/docs/mdMoxygen/index.md)
 
