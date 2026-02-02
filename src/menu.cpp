@@ -85,7 +85,9 @@ void menu::show(){
             maxOptionLen = optionLen;
         }
     }
-
+    
+    if(visibleOptions >= active->totalMenuOptions)active->offsetFromTop = 0;
+    
     unsigned int contentWidth = maxOptionLen;
     if(contentWidth == 0){
         contentWidth = 1;
@@ -237,12 +239,10 @@ if coming from a run, no need to call show();
 @param pantallaDesti where to go
 */
 void menu::setscreen(int pantallaDesti,bool setWhereICame){
-    if(activeScreenMenu > -1){
-        pantalles[activeScreenMenu]->leave();
-        pantalles[activeScreenMenu]->lastSelectedMenuOptionIndex = selectedMenuOption;
-    }
+    if(activeScreenMenu > -1)pantalles[activeScreenMenu]->leave();
     if(setWhereICame)pantalles[pantallaDesti]->whereICame = activeScreenMenu;
     activeScreenMenu = pantallaDesti;
+    pantalles[activeScreenMenu]->lastSelectedMenuOptionIndex = selectedMenuOption;
     pantalles[activeScreenMenu]->refreshMenu();
     pantalles[activeScreenMenu]->setHasMores();
     pantalles[activeScreenMenu]->enter();
