@@ -48,15 +48,6 @@ class menuTextBox;
 class screenMenu;
 class menu;
 
-enum textBoxStatus {
-  noExit,
-  activeEditor,
-  softwareAborted,
-  escPressed,
-  enterPressed,
-  error
-}; 
-
 /**
  * Simplest menuOption base class, is to be inherited, put your custom code at run()
 */
@@ -158,8 +149,8 @@ class menu : public terminalParser{
     virtual void cr() override;/**< inherited from terminalParser. enter */
     void queryTerminalSize(bool wait4Response=true);
     char lastInputChar;/**< temporal character*/
-    unsigned long nextEscBack = 0;/**< move screen back using esc control */
   public:
+    unsigned long nextEscBack = 0;/**< move screen back using esc control */
     uint8_t _topPadding = 1;/**< */
     bool askTerminalSize = true;/**< ask terminal size before menu show (client might respond after being shown) */
     bool verticallyCenter = false;/**< WARNING: operations clears screen! */
@@ -212,23 +203,36 @@ class menu : public terminalParser{
 #ifdef _MENU_UI_BIG_RAM_
 #define userInputLag 50
 #define INPUT_BUFFER_SIZE 320
-
+enum textBoxStatus {
+  noExit,
+  activeEditor,
+  softwareAborted,
+  escPressed,
+  enterPressed,
+  error
+};
 class textBoxMenuOption:public menuOption{
 protected:
 public:
-    String caption;
     textBoxMenuOption();
     textBoxMenuOption( const char* text);
     virtual void run() override;
     virtual bool checkBackgroundEvents();
     virtual bool performUserInteraction();
 };
-
+struct textBoxConfig{
+  const char* prompt = nullptr;
+  char* result = nullptr;
+  unsigned int maxLength=0;
+  unsigned int minLength=0;
+  const char * allowedChars = nullptr;
+  textBoxMenuOption* _textBoxCallBack = nullptr;
+  uint16_t textLineWidth = defaultTextBoxWidth;/**< for textBox editor width */
+  uint8_t lastTextBoxExitCode =0;
+};
 class menuTextBox:public  menu{
   private:
     bool lastInsertStatus;
-    char* _result = nullptr; // ownership: class allocates/frees
-    unsigned int _maxStrLen = 0;
     unsigned int cursorBufferIndex = 0;
     unsigned long lastUserInputTime = 0;
     void drawTextPreCursor();
@@ -258,15 +262,14 @@ class menuTextBox:public  menu{
     void start() override;// to-do posar a menu::
     void end() override;// to-do posar a menu::
     void cr() override;/**< inherited from terminalParser. carriage return */
+    textBoxConfig * runningConfig;
   public:
     static const char* exitCodeDescription[];
-    uint16_t textLineWidth = defaultTextBoxWidth;/**< for textBox editor width */
     uint8_t lastTextBoxExitCode =0;
+    textBoxStatus _textBoxStatus = textBoxStatus::noExit;
     menuTextBox();
     ~menuTextBox(); // ensur e cleanup of dynamic buffer
-    textBoxStatus _textBoxStatus = textBoxStatus::noExit;
-    textBoxMenuOption* _textBoxCallBack = nullptr;
-    void msgTxtInputMultiline(char* result, unsigned int maxLength, unsigned int minLength=0,const char * allowedChars = nullptr);
+    void msgTxtInputMultiline(textBoxConfig * myConfig);
 };
 extern menuTextBox menuSystemOverTty;
 extern menuTextBox * menuSystemOverTtyP;

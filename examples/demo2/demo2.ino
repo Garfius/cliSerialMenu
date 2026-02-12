@@ -2,7 +2,9 @@
 #include <menu.h>
 #define inputPin 20
 #define serialPortUsed Serial// Choose your Serial port
-char allowedChars[86] = 
+static const int textBoxDemoArraySize = 340;
+unsigned int myTextLineWidth = defaultTextBoxWidth;
+static const char allowedChars[86] = 
     "0123456789" 
     "abcdefghij" 
     "klmnopqrst" 
@@ -12,10 +14,11 @@ char allowedChars[86] =
     "YZ.-:+=^!/" 
     "*?&<>()\\;," 
     " @%$#";
+
 class resizer : public menuOption{
   public:
     resizer() :menuOption("Change menu length"){}
-    void run(){
+    void run() override{
       char myText[15];
       String tmpStr = (String)menuSystemOverTty.screenMenuOptions;
       strcpy(myText,tmpStr.c_str());
@@ -39,12 +42,12 @@ class resizer : public menuOption{
 };
 class configurer : public menuOption{
     void printDescription(){
-      String menuConfigDescription = (String)"verticallyCenter:"+(String)menuSystemOverTtyP->verticallyCenter+(String)" horizontallyCenter:"+(String)menuSystemOverTtyP->horizontallyCenter+(String)" textLineWidth:"+(String)menuSystemOverTtyP->textLineWidth+(String)" Columns:"+(String)menuSystemOverTtyP->terminalRowsCols[1]+(String)" Rows:"+(String)menuSystemOverTtyP->terminalRowsCols[0]+(String)" askTerminalSize:"+(String)menuSystemOverTtyP->askTerminalSize+" Menu padding: "+(String)menuSystemOverTtyP->_topPadding;
+      String menuConfigDescription = (String)"verticallyCenter:"+(String)menuSystemOverTtyP->verticallyCenter+(String)" horizontallyCenter:"+(String)menuSystemOverTtyP->horizontallyCenter+(String)" textLineWidth:"+(String)myTextLineWidth+(String)" Columns:"+(String)menuSystemOverTtyP->terminalRowsCols[1]+(String)" Rows:"+(String)menuSystemOverTtyP->terminalRowsCols[0]+(String)" askTerminalSize:"+(String)menuSystemOverTtyP->askTerminalSize+" Menu padding: "+(String)menuSystemOverTtyP->_topPadding;
       menuSystemOverTtyP->msgPause(menuConfigDescription.c_str());
     }
   public:
     configurer() :menuOption("Change menu beheaviour"){}
-    void run(){
+    void run() override{
       printDescription();
       if(menuSystemOverTtyP->msgYes("clear terminal size?")){
         menuSystemOverTtyP->terminalRowsCols[0] = 0;
@@ -79,10 +82,10 @@ class configurer : public menuOption{
 class rangeShow : public menuOptionRangeValue{
   public:
         rangeShow():menuOptionRangeValue("Select text input line width",minTextBoxWidth,80,defaultTextBoxWidth,2){}
-        void run(){
+        void run() override{
             String tmpStr = "Value set to:"+(String)state;
             if(menuSystemOverTtyP->msgYes(tmpStr.c_str())){  
-              menuSystemOverTtyP->textLineWidth = state;
+              myTextLineWidth = state;
               menuSystemOverTtyP->msgSmallWait("ok");
             }
             menuSystemOverTtyP->msgPause();
@@ -96,7 +99,7 @@ class scrollMenuOption: public menuOption{
     scrollMenuOption(const char* text,unsigned int myIndex):menuOption(text){
       _myIndex = myIndex;
     }
-  void run(){
+  void run() override{
     menuSystemOverTty.userTty->print("You just ran index:");
     menuSystemOverTty.printLnCentered(_myIndex);
     menuSystemOverTty.msgPause();
@@ -156,9 +159,8 @@ class myScrollingMenu :public  screenMenu{
     }
 };
 class textBoxDemoMenuOption : public textBoxMenuOption{
-  static const int textBoxDemoArraySize = 340;
   public:
-        textBoxDemoMenuOption():textBoxMenuOption("Multiline text Box input demo"){}
+        textBoxDemoMenuOption():textBoxMenuOption("Multiline preemptible text Box input demo"){}
         bool checkBackgroundEvents() override{
             return digitalRead(inputPin) == HIGH;
         }
@@ -166,11 +168,20 @@ class textBoxDemoMenuOption : public textBoxMenuOption{
             menuSystemOverTtyP->msgPause("physical button pushed");
             return digitalRead(inputPin) == HIGH;
         }
-        void run(){
-          textBoxMenuOption::run();// <-- IMPORTANT !!
+        void run() override{
+          textBoxMenuOption::run();
             char result[textBoxDemoArraySize];
+            textBoxConfig configNow;
+            configNow.prompt = text;
+            configNow.result = result;
+            configNow.maxLength = textBoxDemoArraySize-1;
+            configNow.minLength = 1;
+            configNow.allowedChars = allowedChars;
+            configNow._textBoxCallBack = this;
+            configNow.textLineWidth = myTextLineWidth;
             strcpy(result,"And so that no one else may be blamed if errors are found in this work, I, Johanot Martorell, knight, alone wish to bear the responsibility...");
-            menuSystemOverTty.msgTxtInputMultiline(result,textBoxDemoArraySize-1,1,allowedChars);
+            menuSystemOverTty.msgTxtInputMultiline(&configNow);
+            //menuSystemOverTty.msgTxtInputMultiline(text,result,textBoxDemoArraySize-1,1,allowedChars);
             if(menuSystemOverTty._textBoxStatus == textBoxStatus::enterPressed){
                 menuSystemOverTty.userTty->print("You wrote and enter:");
                 menuSystemOverTty.printLnCentered(result);
@@ -199,6 +210,20 @@ class textBoxDemoMenuOption : public textBoxMenuOption{
             menuSystemOverTty.msgPause();
         }
 };
+class nonInterrumpible:public menuOption{
+  public:
+    nonInterrumpible() :menuOption("Test non interrumpible"){};
+    void run() override{
+      char result[textBoxDemoArraySize];
+      strcpy(result,"And so that no one else may be blamed if errors are found in this work, I, Johanot Martorell, knight, alone wish to bear the responsibility...");
+      textBoxConfig configNow;
+      configNow.prompt = text;
+      configNow.result = result;
+      configNow.maxLength = textBoxDemoArraySize-1;
+      configNow.allowedChars = allowedChars;
+      menuSystemOverTty.msgTxtInputMultiline(&configNow);
+    }
+};
 //--------Screen menus instances
 screenMenu myOptionSelector = screenMenu("Arduino Menu System demo1");
 myScrollingMenu scrolling = myScrollingMenu();
@@ -208,6 +233,8 @@ changeScreenMenuOption thirdMenuOption = changeScreenMenuOption(&scrolling);// c
 resizer fifthMenuOptyion = resizer();
 configurer sixtMenuOptyion = configurer();
 textBoxDemoMenuOption notepat = textBoxDemoMenuOption();
+nonInterrumpible anotherMenuOption = nonInterrumpible();
+
 void setup() {
   //hardware init
   serialPortUsed.begin(9600);
@@ -224,6 +251,7 @@ void setup() {
   myOptionSelector.addMenuOption(&fifthMenuOptyion);
   myOptionSelector.addMenuOption(&sixtMenuOptyion);
   myOptionSelector.addMenuOption(&notepat);
+  myOptionSelector.addMenuOption(&anotherMenuOption);
 
   //menu init
   menuSystemOverTty.init(&serialPortUsed);// requiered at boot 

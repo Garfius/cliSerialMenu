@@ -64,7 +64,7 @@ Some user interface features
 ![Some user interface features](/docs/pictures/UI_stuff.gif)
 
 demo2.ino text box long string editor
-[Text box long string editor](/docs/pictures/demo2-1.jpg)
+![Text box long string editor](/docs/pictures/demo2-1.jpg)
 
 Demo3.ino sd card browser
 ![SD card browser](/docs/pictures/demo3-0.jpg)
