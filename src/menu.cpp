@@ -879,6 +879,7 @@ bool changeScreenMenuOption::refresh(){
 void menu::queryTerminalSize(bool wait4Response){
     this->userTty->print("\e[200;200H");
     this->userTty->print("\e[6n");
+    if(!wait4Response)return;
     unsigned int start = millis();
     while(terminalRowsCols[0] == 0){// wait for response
         if((millis()-start) > queryterminalSizeTimeout)break;
@@ -1035,6 +1036,44 @@ void menuTextBox::lf(){
     }
     _textBoxStatus = textBoxStatus::enterPressed;
 }
+/**
+ * progressBar minimum size 39
+ */
+void menu::setProgressBar(uint32_t value, uint32_t total, char* progressBar)
+{
+  const uint8_t barWidth = 30;
+
+  if (!progressBar) return;
+
+  uint16_t percent = 0;
+  if (total != 0) {
+    if (value > total) value = total;
+    // percent = round(value * 100 / total)
+    percent = (uint16_t)((value * 100u + (total / 2u)) / total);
+    if (percent > 100) percent = 100;
+  }
+
+  uint8_t filled = 0;
+  // filled = round(percent * barWidth / 100)
+  filled = (uint8_t)((percent * barWidth + 50u) / 100u);
+  if (filled > barWidth) filled = barWidth;
+
+  char* p = progressBar;
+  *p++ = '[';
+  for (uint8_t i = 0; i < barWidth; ++i) *p++ = (i < filled) ? '=' : ' ';
+  *p++ = ']';
+  *p++ = ' ';
+
+  // ensure buffer is large enough for barWidth=30: 1+30+1+1+4+1 = 38 incl NUL
+  char tmp[6];
+  int n = snprintf(tmp, sizeof(tmp), "%3u%%", (unsigned)percent);
+  if (n < 0) n = 0;
+
+  memcpy(p, tmp, (size_t)n);
+  p += (size_t)n;
+  *p = '\0';
+}
+
 /**
  * puts the cursor at the end of the text
  */

@@ -147,9 +147,9 @@ class menu : public terminalParser{
     virtual void cUB(unsigned int argc,int *argv) override;/**< inherited from terminalParser. cursor backward left handler*/
     virtual void cPR(unsigned int argc,int *argv) override;/**< inherited from terminalParser. cursor position report*/
     virtual void cr() override;/**< inherited from terminalParser. enter */
-    void queryTerminalSize(bool wait4Response=true);
     char lastInputChar;/**< temporal character*/
   public:
+    void queryTerminalSize(bool wait4Response=true);
     unsigned long nextEscBack = 0;/**< move screen back using esc control */
     uint8_t _topPadding = 1;/**< */
     bool askTerminalSize = true;/**< ask terminal size before menu show (client might respond after being shown) */
@@ -174,7 +174,6 @@ class menu : public terminalParser{
     bool msgYes(const char* prompt);/**< asks yes/no to given text, return true if (y || Y) is press*/
     void msgPause();/**< shows default text and waits any keypress to continue */
     //----------style print operations
-    void setPrettyDotLeadersMargin(int bothTextsLength);/**< Sets dotLeadersMargin based on terminal width for aesthetics */
     void printLnCentered(const char* text);
     void printLnCentered(const String &text);
     void printLnCentered();
@@ -187,12 +186,14 @@ class menu : public terminalParser{
     void printLnCentered(long long num, int base = DEC);
     void printLnCentered(unsigned long long num, int base = DEC);
     void printLnCentered(double num, int digits = 2);
+    void setProgressBar(uint32_t value, uint32_t total, char* progressBar);
     
     uint8_t dotLeadersMargin = 2;
     uint8_t dotLeadersMinDots = 2;
     char dotLeadersChar = '.';
     unsigned int dotLeadersDefaultWidth = menuTextArrayLength;
     unsigned int printDotLeaders(const char* left, const char* right, int margin = -1, int minDots = -1);
+    void setPrettyDotLeadersMargin(int bothTextsLength);/**< Sets dotLeadersMargin based on terminal width for aesthetics */
     //---------not so used, rarely for public use
     void setscreen(int targetScreenMenu, bool setWhereICame = true);/**< change the showing screen*/
     void refresh();/**< to force screen refresh */
@@ -228,7 +229,6 @@ struct textBoxConfig{
   const char * allowedChars = nullptr;
   textBoxMenuOption* _textBoxCallBack = nullptr;
   uint16_t textLineWidth = defaultTextBoxWidth;/**< for textBox editor width */
-  uint8_t lastTextBoxExitCode =0;
 };
 class menuTextBox:public  menu{
   private:
