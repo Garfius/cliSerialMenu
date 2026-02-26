@@ -21,10 +21,10 @@
 
 //---------------------RESOURCES USAGE HERE
 #ifdef _MENU_UI_BIG_RAM_
-  #define screenMenuMax 6// maximum screenMenu instances, displays
+  #define screenMenuMax 10// maximum screenMenu instances, displays
   #define menuTextArrayLength 80 // Max caption length 
-  #define menuOptionsMax 12 // maximum menu options allowed in memory for each screenMenu instance
-  #define displayMenuOptionsDefault 8 // the amount of menu options on the screen, always lower than screenMenuMax
+  #define menuOptionsMax 15 // maximum menu options allowed in memory for each screenMenu instance
+  #define displayMenuOptionsDefault 9 // the amount of menu options on the screen, always lower than screenMenuMax
   #define minTextBoxWidth 4
   #else
   #define screenMenuMax 4// maximum screenMenu instances, displays of menuitems
@@ -186,7 +186,7 @@ class menu : public terminalParser{
     void printLnCentered(long long num, int base = DEC);
     void printLnCentered(unsigned long long num, int base = DEC);
     void printLnCentered(double num, int digits = 2);
-    void setProgressBar(uint32_t value, uint32_t total, char* progressBar);
+    void drawProgressBar(uint32_t value, uint32_t total, char* progressBar);
     
     uint8_t dotLeadersMargin = 2;
     uint8_t dotLeadersMinDots = 2;

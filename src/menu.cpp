@@ -1037,9 +1037,9 @@ void menuTextBox::lf(){
     _textBoxStatus = textBoxStatus::enterPressed;
 }
 /**
- * progressBar minimum size 39
+ * Draws a progress bar to passed char * pointer, minimum char * size 39
  */
-void menu::setProgressBar(uint32_t value, uint32_t total, char* progressBar)
+void menu::drawProgressBar(uint32_t value, uint32_t total, char* progressBar)
 {
   const uint8_t barWidth = 30;
 
@@ -1531,12 +1531,17 @@ void menuTextBox::msgTxtInputMultiline(textBoxConfig *myConfig){
         lastTextBoxExitCode = 2;
         return;
     }
+    if(lastInputChar == '\e'){
+        _textBoxStatus = textBoxStatus::escPressed;    
+        lastTextBoxExitCode = 1;
+        return;
+    }
     //---------checks
     _caractersPermesosStr = String(runningConfig->result);// re use of _caractersPermesosStr for final checks
     if(strlen(runningConfig->result) < runningConfig->minLength){
-        _caractersPermesosStr = String(runningConfig->minLength)+" caracters minim";
+        /*_caractersPermesosStr = String(runningConfig->minLength)+" caracters minim";
         invertColors(&_caractersPermesosStr);
-        this->msgSmallWait(_caractersPermesosStr.c_str());
+        this->msgSmallWait(_caractersPermesosStr.c_str());*/
         _textBoxStatus = textBoxStatus::error;
         lastTextBoxExitCode = 5;
         return;
@@ -1553,15 +1558,11 @@ void menuTextBox::msgTxtInputMultiline(textBoxConfig *myConfig){
     }
     //---------checks end
     
-    strcpy(runningConfig->result, _caractersPermesosStr.c_str());
+    strcpy(runningConfig->result, _caractersPermesosStr.c_str());    
     
-    if(lastInputChar == '\e'){
-        _textBoxStatus = textBoxStatus::escPressed;    
-        lastTextBoxExitCode = 1;
-    }else{
-        _textBoxStatus = textBoxStatus::enterPressed;
-        lastTextBoxExitCode = 0;
-    }
+    _textBoxStatus = textBoxStatus::enterPressed;
+    lastTextBoxExitCode = 0;
+    
     return;
 }
 /**
