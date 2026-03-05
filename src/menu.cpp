@@ -48,7 +48,7 @@ void menu::show(unsigned int index){
     unsigned int targetRow = contentOriginRow + 1 + index;
 
     doMoveCursor(targetRow, contentOriginCol);
-    doEL();
+    doEL(2);
     if(displayIndex < active->totalMenuOptions){
         userTty->write('-');
         userTty->print(active->displayMenuOptionsPnt[displayIndex]->text);
@@ -683,7 +683,7 @@ bool menu::msgTxtInput(const char* prompt,char* result, unsigned int maxLength, 
         tmpStr = String(minLength)+" chars min";
         doCUU(3);
         userTty->write('\r');
-        doEL(true);
+        doEL(2);
         unsigned int errLen = tmpStr.length();
         unsigned int errCol = 1;
         if (horizontallyCenter && terminalRowsCols[1] > errLen) {
@@ -699,7 +699,7 @@ bool menu::msgTxtInput(const char* prompt,char* result, unsigned int maxLength, 
     }else if(tmpStr.indexOf('\e') >= 0){
         doCUU(3);
         userTty->write('\r');
-        doEL(true);
+        doEL(2);
         const char* err = "corrupt txt";
         unsigned int errLen = strlen(err);
         unsigned int errCol = 1;
@@ -1163,7 +1163,7 @@ void menuTextBox::cleanupEditor(){
     liniesPerSortir = getWrittenLinesCount();
     for(unsigned int i=0;i < liniesPerSortir;i++){// erases text
         doCUF(runningConfig->textLineWidth-1);
-        doEL(false);
+        doEL(1);
         doCUB(runningConfig->textLineWidth-1);
         doCUU();
     }
@@ -1274,7 +1274,7 @@ void menuTextBox::redrawFrame(){
         if(drawnFrameHeight == getTotalLinesCapacity()){
             doCUB();// to avoid erasing caret which is also a corner
         }
-        doEL(false);// erases from start to cursor
+        doEL(1);// erases from start to cursor
         doCUU();
         if(drawnFrameHeight == getTotalLinesCapacity()){
             doCUF();// leaves cursor where it belongs
@@ -1319,7 +1319,7 @@ void menuTextBox::eraseStatusBar(){
     unsigned int lines = getCaptionLinesCount();
     for(unsigned int i=0;i < lines;i++){
         doCUU();
-        doEL();
+        doEL(2);
     }
     userTty->write('\r');
 }
@@ -1356,10 +1356,19 @@ void menuTextBox::redrawLine(unsigned int linia){
         }
         size_t restants = runningConfig->textLineWidth - written;
         
-        for(size_t i =0;i<restants;i++)userTty->write(' ');
+        // Optimize: use escape codes when more efficient than writing spaces
+        // doEL(0)=4 bytes + doCUF()≥3 bytes + '|'=1 byte = ≥8 bytes
+        if (restants > 10) {
+            doEL(0);  // Clear from cursor to end of line (clears border too)
+            doCUF(restants);  // Move cursor to where border should be
+            userTty->write('|');  // Redraw frame border
+            doCUB();
+        } else {
+            for(size_t i =0;i<restants;i++)userTty->write(' ');
+        }
     }else{// erase line
         doCUF(runningConfig->textLineWidth-1);
-        doEL(false);
+        doEL(1);
         doCUF();
     }
     // returns cursor to writing position

@@ -133,7 +133,7 @@ class terminalParser  {
         virtual void doCUD(unsigned int amount=1);/**< moves the cursor down amount positions */
         virtual void doCUF(unsigned int amount=1);/**< moves the cursor forward amount positions */
         virtual void doCUB(unsigned int amount=1);/**< moves the cursor back amount positions */
-        virtual void doEL(bool wholeLine = true);/**< erase line, true for whole line, false from start to cursor */
+        virtual void doEL(int operation = 2);/**< erase line: 0=cursor to end, 1=start to cursor, 2=whole line */
         virtual void doHideCursor(bool hide = true);/**< hodes or unhides cursor */
         //----------------string manipulation operations----
         void invertColors(char* entrada,unsigned int allargadaMax);/**< wraps the string in invert color escape codes */

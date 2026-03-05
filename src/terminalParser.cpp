@@ -503,14 +503,16 @@ void terminalParser::doCUB(unsigned int amount){
     }
 }
 /**
- * ESC [ 1 K: erase from start of line to cursor. ESC [ 2 K: erase whole line.
+ * ESC [ 0 K: erase from cursor to end of line. ESC [ 1 K: erase from start of line to cursor. ESC [ 2 K: erase whole line.
 */
-void terminalParser::doEL(bool totaLinia){
+void terminalParser::doEL(int operation){
     userTty->print("\e[");
-    if(totaLinia){
-        userTty->write("2");
-    }else{
+    if(operation == 0){
+        userTty->write("0");
+    }else if(operation == 1){
         userTty->write("1");
+    }else{
+        userTty->write("2");
     }
     userTty->write("K");
 }
