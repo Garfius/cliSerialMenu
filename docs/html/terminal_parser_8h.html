@@ -78,12 +78,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a1a4e083d4a507b9eb10db3a81a8b4731" id="r_a1a4e083d4a507b9eb10db3a81a8b4731"><td class="memItemLeft"><a id="a1a4e083d4a507b9eb10db3a81a8b4731" name="a1a4e083d4a507b9eb10db3a81a8b4731"></a>
-#define&#160;</td><td class="memItemRight"><b>terminalParser_bufferSize</b>&#160;&#160;&#160;10</td></tr>
-<tr class="memitem:aab3d89da9155d7feca19c408b9b69114" id="r_aab3d89da9155d7feca19c408b9b69114"><td class="memItemLeft"><a id="aab3d89da9155d7feca19c408b9b69114" name="aab3d89da9155d7feca19c408b9b69114"></a>
-#define&#160;</td><td class="memItemRight"><b>inverteixColorsTerminal</b>&#160;&#160;&#160;&quot;\e[7m&quot;</td></tr>
-<tr class="memitem:aa19473ab24e6cf57100494740d614e6c" id="r_aa19473ab24e6cf57100494740d614e6c"><td class="memItemLeft"><a id="aa19473ab24e6cf57100494740d614e6c" name="aa19473ab24e6cf57100494740d614e6c"></a>
-#define&#160;</td><td class="memItemRight"><b>colorsTerminalReset</b>&#160;&#160;&#160;&quot;\e[m&quot;</td></tr>
+<tr class="memitem:a1a4e083d4a507b9eb10db3a81a8b4731" id="r_a1a4e083d4a507b9eb10db3a81a8b4731"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a1a4e083d4a507b9eb10db3a81a8b4731">terminalParser_bufferSize</a>&#160;&#160;&#160;10</td></tr>
+<tr class="memitem:aab3d89da9155d7feca19c408b9b69114" id="r_aab3d89da9155d7feca19c408b9b69114"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#aab3d89da9155d7feca19c408b9b69114">inverteixColorsTerminal</a>&#160;&#160;&#160;&quot;\e[7m&quot;</td></tr>
+<tr class="memitem:aa19473ab24e6cf57100494740d614e6c" id="r_aa19473ab24e6cf57100494740d614e6c"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#aa19473ab24e6cf57100494740d614e6c">colorsTerminalReset</a>&#160;&#160;&#160;&quot;\e[m&quot;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -175,7 +172,53 @@ Enumerations</h2></td></tr>
 <p>This library makes intensive use of object-oriented programming. Meant to be inherited to make use of it's features.</p>
 <dl class="section author"><dt>Author</dt><dd>Gerard Forcada Bigas</dd></dl>
 <dl class="section date"><dt>Date</dt><dd>20/12/22 </dd></dl>
-</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
+<a id="aa19473ab24e6cf57100494740d614e6c" name="aa19473ab24e6cf57100494740d614e6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa19473ab24e6cf57100494740d614e6c">&#9670;&#160;</a></span>colorsTerminalReset</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define colorsTerminalReset&#160;&#160;&#160;&quot;\e[m&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>ANSI escape sequence to reset all text attributes </p>
+
+</div>
+</div>
+<a id="aab3d89da9155d7feca19c408b9b69114" name="aab3d89da9155d7feca19c408b9b69114"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab3d89da9155d7feca19c408b9b69114">&#9670;&#160;</a></span>inverteixColorsTerminal</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define inverteixColorsTerminal&#160;&#160;&#160;&quot;\e[7m&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>ANSI escape sequence to enable reverse-video (inverted) colours </p>
+
+</div>
+</div>
+<a id="a1a4e083d4a507b9eb10db3a81a8b4731" name="a1a4e083d4a507b9eb10db3a81a8b4731"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a4e083d4a507b9eb10db3a81a8b4731">&#9670;&#160;</a></span>terminalParser_bufferSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define terminalParser_bufferSize&#160;&#160;&#160;10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>size of the internal parse-ahead character buffer </p>
+
+</div>
+</div>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
 <a id="a58a5e757f9c902f7fc41cd9965723882" name="a58a5e757f9c902f7fc41cd9965723882"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a58a5e757f9c902f7fc41cd9965723882">&#9670;&#160;</a></span>CONTROL_CARACTERS</h2>
 

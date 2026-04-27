@@ -1,41 +1,24 @@
-<a id="terminal_parser_8cpp"></a>
-# File terminalParser.cpp
+---
+title: cliSerialMenu/terminalParser.cpp
+summary: Inheritable byte-by-byte string parser state machine. 
 
-![][C++]
+---
 
-**Location**: `C:/Users/garf/Documents/PlatformIO/Projects/ArduinoMenuSystem/lib/cliSerialMenu/terminalParser.cpp`
+# cliSerialMenu/terminalParser.cpp
 
-Inheritable byte-by-byte string parser state machine.
+Inheritable byte-by-byte string parser state machine.  [More...](#detailed-description)
 
-**author**\
-Gerard Forcada Bigas
+## Detailed Description
 
+Inheritable byte-by-byte string parser state machine. 
 
-**date**\
-20/12/22
+**Author**: Gerard Forcada Bigas
 
-## Includes
-
-* [terminalParser.h](terminal_parser_8h.md#terminal_parser_8h)
+**Date**: 20/12/22 
 
 
-```mermaid
-graph LR
-3["Arduino.h"]
 
-1["terminalParser.cpp"]
-click 1 "terminal_parser_8cpp.md#terminal_parser_8cpp"
-1 --> 2
-
-2["terminalParser.h"]
-click 2 "terminal_parser_8h.md#terminal_parser_8h"
-2 --> 3
-
-```
-
-
-## Source
-
+## Source code
 
 ```cpp
 #include "terminalParser.h"
@@ -522,12 +505,14 @@ void terminalParser::doCUB(unsigned int amount){
         userTty->print("\e[D");
     }
 }
-void terminalParser::doEL(bool totaLinia){
+void terminalParser::doEL(int operation){
     userTty->print("\e[");
-    if(totaLinia){
-        userTty->write("2");
-    }else{
+    if(operation == 0){
+        userTty->write("0");
+    }else if(operation == 1){
         userTty->write("1");
+    }else{
+        userTty->write("2");
     }
     userTty->write("K");
 }
@@ -542,8 +527,6 @@ void terminalParser::doHideCursor(bool hide){
 ```
 
 
-[public]: https://img.shields.io/badge/-public-brightgreen (public)
-[C++]: https://img.shields.io/badge/language-C%2B%2B-blue (C++)
-[private]: https://img.shields.io/badge/-private-red (private)
-[static]: https://img.shields.io/badge/-static-lightgrey (static)
-[protected]: https://img.shields.io/badge/-protected-yellow (protected)
+-------------------------------
+
+Updated on 2026-04-27 at 16:36:45 +0200

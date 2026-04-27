@@ -12,5 +12,6 @@ var hierarchy =
       [ "menu", "classmenu.html", [
         [ "menuTextBox", "classmenu_text_box.html", null ]
       ] ]
-    ] ]
+    ] ],
+    [ "textBoxConfig", "structtext_box_config.html", null ]
 ];

@@ -13,9 +13,9 @@
 #ifndef __terminalParser__
 #define __terminalParser__
 #include <Arduino.h>
-#define terminalParser_bufferSize 10
-#define inverteixColorsTerminal "\e[7m"
-#define colorsTerminalReset "\e[m"
+#define terminalParser_bufferSize 10 /**< size of the internal parse-ahead character buffer */
+#define inverteixColorsTerminal "\e[7m" /**< ANSI escape sequence to enable reverse-video (inverted) colours */
+#define colorsTerminalReset "\e[m" /**< ANSI escape sequence to reset all text attributes */
 /**
  * 1 keystroke keys
 */
@@ -125,7 +125,7 @@ class terminalParser  {
         int llistaNumeros[4];/**< used for argv */
         int ignore;/**< amount of characters to ignore*/
     public:
-        bool insertStatus;
+        bool insertStatus; /**< true when the terminal is in insert mode (as opposed to overwrite mode) */
         //----------------do console display operations----
         virtual void doClearScreen();/**< clear stream console  */
         virtual void doMoveCursor(int line,int column);/**< sends the move cursor command to stream console */
@@ -154,7 +154,7 @@ class terminalParser  {
         virtual void beep();/**< beep received*/
         
         virtual void del();/**< delete pressed*/
-        virtual void insert(bool setDisplayInsert=false);
+        virtual void insert(bool setDisplayInsert=false); /**< insert key pressed; setDisplayInsert true also updates the insert-mode indicator on screen */
         virtual void start();/**< delete pressed*/
         virtual void end();/**< delete pressed*/
         virtual void avPg();/**< delete pressed*/
@@ -165,7 +165,7 @@ class terminalParser  {
         virtual void cUD(unsigned int argc,int *argv);/**< key down*/
         virtual void cUF(unsigned int argc,int *argv);/**< key forward... right*/
         virtual void cUB(unsigned int argc,int *argv);/**< key backward... left*/
-        virtual void eL(unsigned int argc,int *argv);
+        virtual void eL(unsigned int argc,int *argv); /**< EL erase-line escape command handler */
         virtual void sGR(unsigned int argc,int *argv);/**< select graphic rendition*/
         virtual void dSR(unsigned int argc,int *argv);/**< select graphic rendition*/
         virtual void rM(unsigned int argc,int *argv);/**< escape command*/

@@ -1,5 +1,6 @@
 var classmenu_text_box =
 [
-    [ "msgTxtInputMultiline", "classmenu_text_box.html#af3d23ddd2e543da36c43e05246dc8ebc", null ],
-    [ "textLineWidth", "classmenu_text_box.html#ae4e9ac624cc03ebfdd94368ab7f88297", null ]
+    [ "msgTxtInputMultiline", "classmenu_text_box.html#a652c32f15c13f5d28937e0e50ee38c06", null ],
+    [ "_textBoxStatus", "classmenu_text_box.html#a2b87af19357f208143b4b0bff63411c7", null ],
+    [ "lastTextBoxExitCode", "classmenu_text_box.html#a5efaf6b42941cfe1151eee3c68a2569b", null ]
 ];

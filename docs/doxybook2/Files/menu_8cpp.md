@@ -1,206 +1,130 @@
-<a id="menu_8cpp"></a>
-# File menu.cpp
+---
+title: cliSerialMenu/menu.cpp
+summary: Code for menu.h. 
 
-![][C++]
+---
 
-**Location**: `C:/Users/garf/Documents/PlatformIO/Projects/ArduinoMenuSystem/lib/cliSerialMenu/menu.cpp`
+# cliSerialMenu/menu.cpp
 
-Code for [menu.h](menu_8h.md#menu_8h).
+Code for [menu.h]().  [More...](#detailed-description)
+
+## Classes
+
+|                | Name           |
+| -------------- | -------------- |
+| class | **[CharBuffer](Classes/class_char_buffer.md)** <br>Circular character buffer used as intermediate input buffer for the text box editor.  |
+
+## Attributes
+
+|                | Name           |
+| -------------- | -------------- |
+| const char * | **[pressAnyKeyToContinue](Files/menu_8cpp.md#variable-pressanykeytocontinue)**  |
+| [CharBuffer](Classes/class_char_buffer.md) | **[buffer](Files/menu_8cpp.md#variable-buffer)**  |
+| [menuTextBox](Classes/classmenu_text_box.md) | **[menuSystemOverTty](Files/menu_8cpp.md#variable-menusystemovertty)**  |
+| [menuTextBox](Classes/classmenu_text_box.md) * | **[menuSystemOverTtyP](Files/menu_8cpp.md#variable-menusystemoverttyp)**  |
+
+## Defines
+
+|                | Name           |
+| -------------- | -------------- |
+|  | **[menuOptionDelimiter](Files/menu_8cpp.md#define-menuoptiondelimiter)**  |
+|  | **[cliMsgWait](Files/menu_8cpp.md#define-climsgwait)**  |
+|  | **[menuRefreshInterval](Files/menu_8cpp.md#define-menurefreshinterval)**  |
+
+## Detailed Description
+
+Code for [menu.h](). 
+
+**Author**: Gerard Forcada Bigas
+
+**Date**: 20/12/22 
 
 Might want to change some preprocessor directives to customize beheaviour
 
 
 
+## Attributes Documentation
 
+### variable pressAnyKeyToContinue
 
-
-**author**\
-Gerard Forcada Bigas
-
-
-**date**\
-20/12/22
-
-## Classes
-
-* [CharBuffer](class_char_buffer.md#class_char_buffer)
-
-## Includes
-
-* [menu.h](menu_8h.md#menu_8h)
-
-
-```mermaid
-graph LR
-4["Arduino.h"]
-
-1["menu.cpp"]
-click 1 "menu_8cpp.md#menu_8cpp"
-1 --> 2
-
-2["menu.h"]
-click 2 "menu_8h.md#menu_8h"
-2 --> 3
-2 --> 4
-
-3["terminalParser.h"]
-click 3 "terminal_parser_8h.md#terminal_parser_8h"
-3 --> 4
-
+```cpp
+static const char * pressAnyKeyToContinue = "Press any key to continue";
 ```
 
 
-## Macros
+### variable buffer
 
-<a id="menu_8cpp_1a8c877b00dc535facfa2f3b35b1b74b7f"></a>
-### Macro menuOptionDelimiter
+```cpp
+CharBuffer buffer;
+```
 
-![][public]
 
+global input character buffer instance used by the text box editor 
+
+
+### variable menuSystemOverTty
+
+```cpp
+menuTextBox menuSystemOverTty;
+```
+
+
+global menu system instance (with text box support) 
+
+
+### variable menuSystemOverTtyP
+
+```cpp
+menuTextBox * menuSystemOverTtyP = &menuSystemOverTty;
+```
+
+
+pointer to the global menu system instance 
+
+
+
+## Macros Documentation
+
+### define menuOptionDelimiter
 
 ```cpp
 #define menuOptionDelimiter ':'
 ```
 
 
+separator between caption and value in [menuOptionOnOff](Classes/classmenu_option_on_off.md) and [menuOptionRangeValue](Classes/classmenu_option_range_value.md)
 
 
-
-
-
-
-<a id="menu_8cpp_1a4b8e37dc95cdf19253602512c729c8dc"></a>
-### Macro cliMsgWait
-
-![][public]
-
+### define cliMsgWait
 
 ```cpp
 #define cliMsgWait 1250
 ```
 
 
+push message display timeout in milliseconds 
 
 
-
-
-
-
-<a id="menu_8cpp_1a5821e981efec035ed35549f99ab2d8d6"></a>
-### Macro menuRefreshInterval
-
-![][public]
-
+### define menuRefreshInterval
 
 ```cpp
 #define menuRefreshInterval 250
 ```
 
 
+periodic screen refresh interval in milliseconds 
 
 
-
-
-
-
-## Variables
-
-<a id="menu_8cpp_1a4df13028e814c836b0760b2861e7503d"></a>
-### Variable pressAnyKeyToContinue
-
-![][public]
-![][static]
-
-**Definition**: `C:/Users/garf/Documents/PlatformIO/Projects/ArduinoMenuSystem/lib/cliSerialMenu/menu.cpp` (line 18)
-
-
-```cpp
-const char* pressAnyKeyToContinue = "Press any key to continue"
-```
-
-
-
-
-
-
-
-
-**Type**: const char *
-
-<a id="menu_8cpp_1a4675348869a81e85e179f090ba3329df"></a>
-### Variable buffer
-
-![][public]
-
-**Definition**: `C:/Users/garf/Documents/PlatformIO/Projects/ArduinoMenuSystem/lib/cliSerialMenu/menu.cpp` (line 922)
-
-
-```cpp
-CharBuffer buffer
-```
-
-
-
-
-
-
-
-
-**Type**: [CharBuffer](class_char_buffer.md#class_char_buffer)
-
-<a id="menu_8cpp_1a58aa1cbda0d0701af5cd55568509cd68"></a>
-### Variable menuSystemOverTty
-
-![][public]
-
-**Definition**: `C:/Users/garf/Documents/PlatformIO/Projects/ArduinoMenuSystem/lib/cliSerialMenu/menu.cpp` (line 1643)
-
-
-```cpp
-menuTextBox menuSystemOverTty
-```
-
-
-
-
-
-
-
-
-**Type**: [menuTextBox](classmenu_text_box.md#classmenu_text_box)
-
-<a id="menu_8cpp_1a2e8e5a0db1e23bfacce9ac4ad19e69e9"></a>
-### Variable menuSystemOverTtyP
-
-![][public]
-
-**Definition**: `C:/Users/garf/Documents/PlatformIO/Projects/ArduinoMenuSystem/lib/cliSerialMenu/menu.cpp` (line 1644)
-
-
-```cpp
-menuTextBox* menuSystemOverTtyP = &menuSystemOverTty
-```
-
-
-
-
-
-
-
-
-**Type**: [menuTextBox](classmenu_text_box.md#classmenu_text_box) *
-
-## Source
-
+## Source code
 
 ```cpp
 
 #include "menu.h"
 
 //CONFIG HERE
-#define menuOptionDelimiter ':'
-#define cliMsgWait 1250 // push message timeout
-#define menuRefreshInterval 250 // self-explanatory
+#define menuOptionDelimiter ':' 
+#define cliMsgWait 1250 
+#define menuRefreshInterval 250 
 
 static const char * pressAnyKeyToContinue = "Press any key to continue";
 
@@ -232,7 +156,7 @@ void menu::show(unsigned int index){
     unsigned int targetRow = contentOriginRow + 1 + index;
 
     doMoveCursor(targetRow, contentOriginCol);
-    doEL();
+    doEL(2);
     if(displayIndex < active->totalMenuOptions){
         userTty->write('-');
         userTty->print(active->displayMenuOptionsPnt[displayIndex]->text);
@@ -264,7 +188,9 @@ void menu::show(){
             maxOptionLen = optionLen;
         }
     }
-
+    
+    if(visibleOptions >= active->totalMenuOptions)active->offsetFromTop = 0;
+    
     unsigned int contentWidth = maxOptionLen;
     if(contentWidth == 0){
         contentWidth = 1;
@@ -401,8 +327,8 @@ void menu::addscreen(screenMenu* pantalla){
 void menu::setscreen(int pantallaDesti,bool setWhereICame){
     if(activeScreenMenu > -1)pantalles[activeScreenMenu]->leave();
     if(setWhereICame)pantalles[pantallaDesti]->whereICame = activeScreenMenu;
-    pantalles[activeScreenMenu]->lastSelectedMenuOptionIndex = selectedMenuOption;
     activeScreenMenu = pantallaDesti;
+    pantalles[activeScreenMenu]->lastSelectedMenuOptionIndex = selectedMenuOption;
     pantalles[activeScreenMenu]->refreshMenu();
     pantalles[activeScreenMenu]->setHasMores();
     pantalles[activeScreenMenu]->enter();
@@ -827,7 +753,7 @@ bool menu::msgTxtInput(const char* prompt,char* result, unsigned int maxLength, 
         tmpStr = String(minLength)+" chars min";
         doCUU(3);
         userTty->write('\r');
-        doEL(true);
+        doEL(2);
         unsigned int errLen = tmpStr.length();
         unsigned int errCol = 1;
         if (horizontallyCenter && terminalRowsCols[1] > errLen) {
@@ -843,7 +769,7 @@ bool menu::msgTxtInput(const char* prompt,char* result, unsigned int maxLength, 
     }else if(tmpStr.indexOf('\e') >= 0){
         doCUU(3);
         userTty->write('\r');
-        doEL(true);
+        doEL(2);
         const char* err = "corrupt txt";
         unsigned int errLen = strlen(err);
         unsigned int errCol = 1;
@@ -1012,6 +938,7 @@ bool changeScreenMenuOption::refresh(){
 void menu::queryTerminalSize(bool wait4Response){
     this->userTty->print("\e[200;200H");
     this->userTty->print("\e[6n");
+    if(!wait4Response)return;
     unsigned int start = millis();
     while(terminalRowsCols[0] == 0){// wait for response
         if((millis()-start) > queryterminalSizeTimeout)break;
@@ -1030,10 +957,9 @@ private:
     volatile static char myCharBuffer[INPUT_BUFFER_SIZE];// whole ram must be buffer, lol
 public:
     
-    volatile int head = 0;
-    volatile int tail = 0;
+    volatile int head = 0; 
+    volatile int tail = 0; 
 
-    // Add a character to the buffer
     void addChar(char c) {
         if (((tail + 1) % INPUT_BUFFER_SIZE) == head) { // Buffer is full
           //giveErrorVisibility(false);
@@ -1042,7 +968,6 @@ public:
         tail = (tail + 1) % INPUT_BUFFER_SIZE;
     }
 
-    // Consume a character from the buffer
     char consumeChar() {
         if (head == tail) { // Buffer is empty
           //giveErrorVisibility(false);
@@ -1054,13 +979,12 @@ public:
 };
 // Define static member of CharBuffer class
 volatile char CharBuffer::myCharBuffer[INPUT_BUFFER_SIZE];
-CharBuffer buffer;
+CharBuffer buffer; 
 
 textBoxMenuOption::textBoxMenuOption(){}
-textBoxMenuOption::textBoxMenuOption( const char* _text): menuOption(_text), caption(_text){}
+textBoxMenuOption::textBoxMenuOption( const char* _text): menuOption(_text){}
 void textBoxMenuOption::run(){
     menuOption::run();
-    menuSystemOverTtyP->_textBoxCallBack = this;
 }
 bool textBoxMenuOption::checkBackgroundEvents(){return false;}
 bool textBoxMenuOption::performUserInteraction(){return false;}
@@ -1072,7 +996,7 @@ void menuTextBox::cUB(unsigned int argc,int *argv){
     if(getCursorRowIndex()> 0){
         if(getCursorColIndex() == 0){
             doCUU();
-            doCUF(textLineWidth-1);
+            doCUF(runningConfig->textLineWidth-1);
         }else
         {
             doCUB();
@@ -1091,9 +1015,9 @@ void menuTextBox::cUU(unsigned int argc,int *argv){// keyUp
         return;
     }
     if(getCursorRowIndex() > 0 ){
-        if(cursorBufferIndex >= textLineWidth){ // adjust?
+        if(cursorBufferIndex >= runningConfig->textLineWidth){ // adjust?
             doCUU();
-            cursorBufferIndex-=textLineWidth;
+            cursorBufferIndex-=runningConfig->textLineWidth;
         }
     }
 }
@@ -1102,10 +1026,10 @@ void menuTextBox::cUD(unsigned int argc,int *argv){// keyDn
         menu::cUD(argc,argv);
         return;
     }
-    if((getCursorRowIndex() < getTotalLinesCapacity()) && (cursorBufferIndex+textLineWidth < _maxStrLen)){
-        if((cursorBufferIndex+textLineWidth)<= strlen(_result)){ // adjust?
+    if((getCursorRowIndex() < getTotalLinesCapacity()) && (cursorBufferIndex+runningConfig->textLineWidth < runningConfig->maxLength)){
+        if((cursorBufferIndex+runningConfig->textLineWidth)<= strlen(runningConfig->result)){ // adjust?
             doCUD();
-            cursorBufferIndex+=textLineWidth;
+            cursorBufferIndex+=runningConfig->textLineWidth;
         }
     }
 }
@@ -1114,9 +1038,9 @@ void menuTextBox::cUF(unsigned int argc,int *argv){
         menu::cUF(argc,argv);
         return;
     }
-    if((cursorBufferIndex < strlen(_result))&&((cursorBufferIndex+1) < _maxStrLen)){ //  with (bicp+1) does not allow cursor to go over \0
-        if(getCursorColIndex() >= (textLineWidth-1)){// -1 because one is offset and the other count
-            doCUB(textLineWidth-1);
+    if((cursorBufferIndex < strlen(runningConfig->result))&&((cursorBufferIndex+1) < runningConfig->maxLength)){ //  with (bicp+1) does not allow cursor to go over \0
+        if(getCursorColIndex() >= (runningConfig->textLineWidth-1)){// -1 because one is offset and the other count
+            doCUB(runningConfig->textLineWidth-1);
             doCUD();
         }else{
             doCUF();
@@ -1136,7 +1060,7 @@ void menuTextBox::del(){
         menu::del();
         return;
     }
-    if(cursorBufferIndex < strlen(_result)){//unsigned int aa = strlen(inputBuffer);
+    if(cursorBufferIndex < strlen(runningConfig->result)){//unsigned int aa = strlen(inputBuffer);
         removeCharAtIndex(cursorBufferIndex);
     }
 }
@@ -1147,7 +1071,7 @@ void menuTextBox::backSpace(){
             doCUB();
         }else if((getCursorColIndex() == 0) && (cursorBufferIndex > 0)){
             doCUU();
-            doCUF(textLineWidth-1);
+            doCUF(runningConfig->textLineWidth-1);
         }
         cursorBufferIndex--;
     }else{
@@ -1161,6 +1085,41 @@ void menuTextBox::lf(){
     }
     _textBoxStatus = textBoxStatus::enterPressed;
 }
+void menu::drawProgressBar(uint32_t value, uint32_t total, char* progressBar)
+{
+  const uint8_t barWidth = 30;
+
+  if (!progressBar) return;
+
+  uint16_t percent = 0;
+  if (total != 0) {
+    if (value > total) value = total;
+    // percent = round(value * 100 / total)
+    percent = (uint16_t)((value * 100u + (total / 2u)) / total);
+    if (percent > 100) percent = 100;
+  }
+
+  uint8_t filled = 0;
+  // filled = round(percent * barWidth / 100)
+  filled = (uint8_t)((percent * barWidth + 50u) / 100u);
+  if (filled > barWidth) filled = barWidth;
+
+  char* p = progressBar;
+  *p++ = '[';
+  for (uint8_t i = 0; i < barWidth; ++i) *p++ = (i < filled) ? '=' : ' ';
+  *p++ = ']';
+  *p++ = ' ';
+
+  // ensure buffer is large enough for barWidth=30: 1+30+1+1+4+1 = 38 incl NUL
+  char tmp[6];
+  int n = snprintf(tmp, sizeof(tmp), "%3u%%", (unsigned)percent);
+  if (n < 0) n = 0;
+
+  memcpy(p, tmp, (size_t)n);
+  p += (size_t)n;
+  *p = '\0';
+}
+
 void menuTextBox::start(){
     if(_textBoxStatus == textBoxStatus::activeEditor){
         unsigned int _liniesAvall = getCursorColIndex();
@@ -1181,17 +1140,17 @@ void menuTextBox::end(){
         _liniesAvall = _liniesAvall-(getCursorRowIndex()+1);
         doCUD(_liniesAvall);
         doCUB(getCursorColIndex());
-        cursorBufferIndex = strlen(_result)-1;
+        cursorBufferIndex = strlen(runningConfig->result)-1;
         _liniesAvall = getCursorColIndex();
         doCUF(_liniesAvall);
-        if((cursorBufferIndex+1) < _maxStrLen){
+        if((cursorBufferIndex+1) < runningConfig->maxLength){
             this->cUF(0,0);
         }
     }
 }
 unsigned int menuTextBox::getTotalLinesCapacity(){
-    unsigned int aa = this->_maxStrLen/textLineWidth;
-    if (this->_maxStrLen > (aa*textLineWidth)){
+    unsigned int aa = runningConfig->maxLength/runningConfig->textLineWidth;
+    if (runningConfig->maxLength > (aa*runningConfig->textLineWidth)){
         return aa+1;
     }
     return aa;
@@ -1205,13 +1164,13 @@ void menuTextBox::manageCaretAndSpace(bool borrar){
     
     for(unsigned int i=0;i < _totalLinies;i++)userTty->write('\n');// ensures screen space
     
-    doCUF(textLineWidth);// caret
+    doCUF(runningConfig->textLineWidth);// caret
     if(borrar){
         userTty->write(' ');
     }else{
         userTty->write(frameChars[2]);
     }
-    doCUB(textLineWidth+1);
+    doCUB(runningConfig->textLineWidth+1);
     doCUU(_totalLinies);
     if(borrar){
         doCUD(getCursorRowIndex());// missing doCUF(getCursorColIndex()); ??
@@ -1232,45 +1191,45 @@ void menuTextBox::cleanupEditor(){
     
     liniesPerSortir = getWrittenLinesCount();
     for(unsigned int i=0;i < liniesPerSortir;i++){// erases text
-        doCUF(textLineWidth-1);
-        doEL(false);
-        doCUB(textLineWidth-1);
+        doCUF(runningConfig->textLineWidth-1);
+        doEL(1);
+        doCUB(runningConfig->textLineWidth-1);
         doCUU();
     }
     
     userTty->write('\n');
 }
 void menuTextBox::statusBar(){
-    const char* caption = (_textBoxCallBack != nullptr) ? _textBoxCallBack->caption.c_str() : "InitError";
+    //const char* caption = (_textBoxCallBack != nullptr) ? _textBoxCallBack->caption.c_str() : "InitError";
     
     // Horizontally center the caption if terminalRowsCols is initialized
-    unsigned int captionLen = strlen(caption)+strlen(insertText);
+    unsigned int captionLen = strlen(runningConfig->prompt)+strlen(insertText);
     
     if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > captionLen) {
         doCUF((terminalRowsCols[1] - captionLen) / 2);
     }
     
     userTty->print(inverteixColorsTerminal);
-    userTty->print(caption);
+    userTty->print(runningConfig->prompt);
     if(insertStatus) userTty->print(insertText);
     userTty->print(colorsTerminalReset);
     userTty->println();
     
     // Horizontally center the cursor for the textBox
-    if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > textLineWidth) {
-        doCUF((terminalRowsCols[1] - textLineWidth) / 2);
+    if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > runningConfig->textLineWidth) {
+        doCUF((terminalRowsCols[1] - runningConfig->textLineWidth) / 2);
     }
 }
 void menuTextBox::removeCharAtIndex(unsigned int desde){
     unsigned int totalLiniesAbans = getWrittenLinesCount();
-    if(desde > strlen(_result)){
+    if(desde > strlen(runningConfig->result)){
         userTty->print("ERB");
         return;
     }
-    int bufferLength = strlen(_result);
+    int bufferLength = strlen(runningConfig->result);
     for (int i = desde; i < bufferLength; ++i) {// here it differs from the backSpace of the insert
-        _result[i] = _result[i + 1];
-        if(_result[i] == '\0')break;
+        runningConfig->result[i] = runningConfig->result[i + 1];
+        if(runningConfig->result[i] == '\0')break;
     }
     
     int y;
@@ -1286,27 +1245,27 @@ void menuTextBox::removeCharAtIndex(unsigned int desde){
 void menuTextBox::drawTextPreCursor(){
     manageCaretAndSpace();
     unsigned int pos=0;
-    unsigned int endindex =textLineWidth;
+    unsigned int endindex =runningConfig->textLineWidth;
     while(pos < this->cursorBufferIndex){
         if(endindex > cursorBufferIndex) endindex = cursorBufferIndex + 1;
         
         unsigned int len = endindex - pos;
-        unsigned int bufLen = strlen(_result);
+        unsigned int bufLen = strlen(runningConfig->result);
         unsigned int printLen = len;
         if (pos >= bufLen) printLen = 0;
         else if (pos + printLen > bufLen) printLen = bufLen - pos;
         
         size_t written = 0;
-        if (printLen > 0) written = userTty->write((const uint8_t*)(_result + pos), printLen);
+        if (printLen > 0) written = userTty->write((const uint8_t*)(runningConfig->result + pos), printLen);
         
-        size_t restants = textLineWidth - written;
+        size_t restants = runningConfig->textLineWidth - written;
         for(size_t i =0;i<restants;i++){
             userTty->write(' ');
         }
         doCUD();
-        doCUB(textLineWidth);
-        pos += textLineWidth;
-        endindex = pos+this->textLineWidth;
+        doCUB(runningConfig->textLineWidth);
+        pos += runningConfig->textLineWidth;
+        endindex = pos+this->runningConfig->textLineWidth;
     }
     endindex = getCursorColIndex();
     if(endindex > 0){
@@ -1318,24 +1277,24 @@ void menuTextBox::redrawFrame(){
     doCUD(getWrittenLinesCount()-getCursorRowIndex());// moves cursor down
     if(drawnFrameHeight > getWrittenLinesCount()){// shrinks bottom border by 1, here cursor is at bottom border line
         doCUD();
-        if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > textLineWidth) {
+        if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > runningConfig->textLineWidth) {
             doCUB(getCursorColIndex()+1);
             userTty->write(' ');
         }else{
             doCUB(getCursorColIndex());
         }
-        doCUF(textLineWidth);
+        doCUF(runningConfig->textLineWidth);
         if(drawnFrameHeight == getTotalLinesCapacity()){
             doCUB();// to avoid erasing caret which is also a corner
         }
-        doEL(false);// erases from start to cursor
+        doEL(1);// erases from start to cursor
         doCUU();
         if(drawnFrameHeight == getTotalLinesCapacity()){
             doCUF();// leaves cursor where it belongs
         }
     }else{// expands bottom border by 1, there is 1 character on the new line, cursor at last line writing height
         doCUU();// places cursor just after the first character already written on new line
-        if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > textLineWidth) {
+        if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > runningConfig->textLineWidth) {
             doCUB(getCursorColIndex()+1);
             userTty->write(frameChars[1]);// draws border
             doCUB();
@@ -1346,35 +1305,34 @@ void menuTextBox::redrawFrame(){
             doCUB(getCursorColIndex());
         }
         doCUF();// skips the (new) 1 character of the new line
-        for(unsigned int i =1;i< textLineWidth;i++)userTty->write(' ');// clears rest of characters on the line
+        for(unsigned int i =1;i< runningConfig->textLineWidth;i++)userTty->write(' ');// clears rest of characters on the line
         userTty->write(frameChars[1]);// draws border
         doCUB();
         doCUD();
     }
     // here cursor is at the line of the new bottom bar(frame), right corner
-    if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > textLineWidth) {
-        doCUB(textLineWidth+1);
+    if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > runningConfig->textLineWidth) {
+        doCUB(runningConfig->textLineWidth+1);
         userTty->write(frameChars[2]);// draws left corner
     }else{
-        doCUB(textLineWidth);
+        doCUB(runningConfig->textLineWidth);
     }
-    for(unsigned int i =0;i< textLineWidth;i++)userTty->write(frameChars[0]);// draws bottom horizontal border
+    for(unsigned int i =0;i< runningConfig->textLineWidth;i++)userTty->write(frameChars[0]);// draws bottom horizontal border
     userTty->write(frameChars[2]);// draws right corner
     // re-positions cursor at new character position
-    doCUB(textLineWidth+1);
+    doCUB(runningConfig->textLineWidth+1);
     doCUU(getWrittenLinesCount());
     doCUD(getCursorRowIndex());
     doCUF(getCursorColIndex());
     drawnFrameHeight = getWrittenLinesCount();
 }
 void menuTextBox::eraseStatusBar(){
-    const char* caption = (_textBoxCallBack != nullptr) ? _textBoxCallBack->caption.c_str() : "InitError";
-    unsigned int captionLen = strlen(caption)+strlen(insertText);
+    unsigned int captionLen = strlen(runningConfig->prompt)+strlen(insertText);
     
     unsigned int lines = getCaptionLinesCount();
     for(unsigned int i=0;i < lines;i++){
         doCUU();
-        doEL();
+        doEL(2);
     }
     userTty->write('\r');
 }
@@ -1393,24 +1351,33 @@ void menuTextBox::redrawLine(unsigned int linia){
     }
     doCUB(getCursorColIndex());
     if(linia < getWrittenLinesCount()){// print line
-        unsigned int startIdx = linia * textLineWidth;
+        unsigned int startIdx = linia * runningConfig->textLineWidth;
         unsigned int len = 0;
-        unsigned int bufLen = strlen(_result);
+        unsigned int bufLen = strlen(runningConfig->result);
         if (startIdx < bufLen) {
             len = bufLen - startIdx;
-            if (len > textLineWidth) len = textLineWidth;
+            if (len > runningConfig->textLineWidth) len = runningConfig->textLineWidth;
         }
         
         size_t written = 0;
         if (len > 0) {
-            written = userTty->write((const uint8_t*)(_result + startIdx), len);
+            written = userTty->write((const uint8_t*)(runningConfig->result + startIdx), len);
         }
-        size_t restants = textLineWidth - written;
+        size_t restants = runningConfig->textLineWidth - written;
         
-        for(size_t i =0;i<restants;i++)userTty->write(' ');
+        // Optimize: use escape codes when more efficient than writing spaces
+        // doEL(0)=4 bytes + doCUF()≥3 bytes + '|'=1 byte = ≥8 bytes
+        if (restants > 10) {
+            doEL(0);  // Clear from cursor to end of line (clears border too)
+            doCUF(restants);  // Move cursor to where border should be
+            userTty->write('|');  // Redraw frame border
+            doCUB();
+        } else {
+            for(size_t i =0;i<restants;i++)userTty->write(' ');
+        }
     }else{// erase line
-        doCUF(textLineWidth-1);
-        doEL(false);
+        doCUF(runningConfig->textLineWidth-1);
+        doEL(1);
         doCUF();
     }
     // returns cursor to writing position
@@ -1421,7 +1388,7 @@ void menuTextBox::redrawLine(unsigned int linia){
         y=-y;
         doCUD(y);
     }
-    doCUB(textLineWidth);
+    doCUB(runningConfig->textLineWidth);
     doCUF(getCursorColIndex());
 }
 void menuTextBox::drawTextPostCursor(unsigned int desDaquestaFinsAlFinal){
@@ -1429,33 +1396,33 @@ void menuTextBox::drawTextPostCursor(unsigned int desDaquestaFinsAlFinal){
         redrawLine(i);
     }
 }
-void menuTextBox::msgTxtInputMultiline(char* result, unsigned int maxLength, unsigned int minLength,const char * allowedChars ){    
+void menuTextBox::msgTxtInputMultiline(textBoxConfig *myConfig){
+    runningConfig = myConfig;
     lastInputChar = '\0';
     _textBoxStatus = textBoxStatus::activeEditor;
-    _maxStrLen = maxLength;
-    _result = result;
-    cursorBufferIndex = strlen(result);
+    
+    cursorBufferIndex = strlen(runningConfig->result);
+    unsigned int bufferLength;
     insertStatus = true;
     lastInsertStatus = insertStatus;
-    result[_maxStrLen] = '\0';
+    runningConfig->result[runningConfig->maxLength] = '\0';
     
     String _caractersPermesosStr;
     bool tmpBool = false;
     unsigned int desDaquestaFinsAlFinal;
-    unsigned int bufferLength;
     
-    if(cursorBufferIndex> maxLength){
+    if(cursorBufferIndex> runningConfig->maxLength){
         _textBoxStatus = textBoxStatus::error;
         lastTextBoxExitCode = 3;
         return;
-    }else if(cursorBufferIndex == _maxStrLen)cursorBufferIndex--;
+    }else if(cursorBufferIndex == runningConfig->maxLength)cursorBufferIndex--;
     
-    if(textLineWidth < minTextBoxWidth){
+    if(runningConfig->textLineWidth < minTextBoxWidth){
         _textBoxStatus = textBoxStatus::error;
         lastTextBoxExitCode = 4;
         return;
     }
-    if ((terminalRowsCols[1] > 0) && (terminalRowsCols[1] < (textLineWidth+2))) {
+    if ((terminalRowsCols[1] > 0) && (terminalRowsCols[1] < (runningConfig->textLineWidth+2))) {
         _textBoxStatus = textBoxStatus::error;
         lastTextBoxExitCode = 9;
         return;
@@ -1479,16 +1446,16 @@ void menuTextBox::msgTxtInputMultiline(char* result, unsigned int maxLength, uns
     statusBar();
     drawTextPreCursor();
     drawFrame();
-    if(allowedChars != nullptr){
-        _caractersPermesosStr = String(allowedChars);
+    if(runningConfig->allowedChars != nullptr){
+        _caractersPermesosStr = String(runningConfig->allowedChars);
     }
     while (_textBoxStatus == textBoxStatus::activeEditor) {// add: line jump controls, arrows, put a bool of menu object to receiver
-        if(_textBoxCallBack != nullptr)tmpBool = _textBoxCallBack->checkBackgroundEvents();
+        if(runningConfig->_textBoxCallBack != nullptr)tmpBool = runningConfig->_textBoxCallBack->checkBackgroundEvents();
         if(tmpBool||(lastInsertStatus != insertStatus)){
             if(lastInsertStatus != insertStatus)lastInsertStatus = insertStatus;
             cleanupEditor();
             eraseStatusBar();
-            if((_textBoxCallBack != nullptr) && tmpBool &&(_textBoxCallBack->performUserInteraction()))
+            if((runningConfig->_textBoxCallBack != nullptr) && tmpBool &&(runningConfig->_textBoxCallBack->performUserInteraction()))
                 _textBoxStatus = textBoxStatus::softwareAborted;
             statusBar();
             drawTextPreCursor();
@@ -1503,20 +1470,20 @@ void menuTextBox::msgTxtInputMultiline(char* result, unsigned int maxLength, uns
             if((buffer.head != buffer.tail) && (millis() > (lastUserInputTime+userInputLag))) {
                 lastInputChar = buffer.consumeChar();
                 if(lastInputChar == '\e')nextEscBack = (millis()+escBackMillisecondsDelay);
-                if(doGuess(lastInputChar) && ((allowedChars == nullptr) ||(_caractersPermesosStr.indexOf(lastInputChar) > -1))){
-                    if(cursorBufferIndex+1 < _maxStrLen){
+                if(doGuess(lastInputChar) && ((runningConfig->allowedChars == nullptr) ||(_caractersPermesosStr.indexOf(lastInputChar) > -1))){
+                    if(cursorBufferIndex+1 < runningConfig->maxLength){
                         if(insertStatus){
-                            bufferLength = strlen(result);
+                            bufferLength = strlen(runningConfig->result);
                             desDaquestaFinsAlFinal = getCursorRowIndex();
-                            if(bufferLength < _maxStrLen){// shifts string
+                            if(bufferLength < runningConfig->maxLength){// shifts string
                                 for (int i = bufferLength; i >= (int)cursorBufferIndex; --i) {// damn c++ and the damn cast
-                                    result[i+1] = result[i];// if inputBuffer[i+1] == '\0' break;
+                                    runningConfig->result[i+1] = runningConfig->result[i];// if inputBuffer[i+1] == '\0' break;
                                 }
-                                if(getCursorColIndex() >= (textLineWidth-1)){// if it falls outside
+                                if(getCursorColIndex() >= (runningConfig->textLineWidth-1)){// if it falls outside
                                     userTty->write(lastInputChar);
-                                    if((cursorBufferIndex+1) < _maxStrLen){// falls outside but is not the end
+                                    if((cursorBufferIndex+1) < runningConfig->maxLength){// falls outside but is not the end
                                         desDaquestaFinsAlFinal++;
-                                        doCUB(textLineWidth);
+                                        doCUB(runningConfig->textLineWidth);
                                         doCUD();
                                     }else{// is the end, go back
                                         doCUB();
@@ -1524,21 +1491,21 @@ void menuTextBox::msgTxtInputMultiline(char* result, unsigned int maxLength, uns
                                 }else{
                                     doCUF();
                                 }
-                                result[cursorBufferIndex] = lastInputChar;
-                                if((cursorBufferIndex+1) < _maxStrLen){
+                                runningConfig->result[cursorBufferIndex] = lastInputChar;
+                                if((cursorBufferIndex+1) < runningConfig->maxLength){
                                     cursorBufferIndex++;
                                 }
                                 drawTextPostCursor(desDaquestaFinsAlFinal);
                             }
                         }else{
-                            if(result[cursorBufferIndex] == '\0'){
-                                result[cursorBufferIndex+1]= '\0';
+                            if(runningConfig->result[cursorBufferIndex] == '\0'){
+                                runningConfig->result[cursorBufferIndex+1]= '\0';
                             }
-                            result[cursorBufferIndex] = lastInputChar;
+                            runningConfig->result[cursorBufferIndex] = lastInputChar;
                             userTty->write(lastInputChar);
-                            if((cursorBufferIndex+1)< _maxStrLen){
-                                if(getCursorColIndex() >= (textLineWidth-1)){
-                                    doCUB(textLineWidth);
+                            if((cursorBufferIndex+1)< runningConfig->maxLength){
+                                if(getCursorColIndex() >= (runningConfig->textLineWidth-1)){
+                                    doCUB(runningConfig->textLineWidth);
                                     doCUD();
                                 }
                                 cursorBufferIndex++;
@@ -1547,7 +1514,7 @@ void menuTextBox::msgTxtInputMultiline(char* result, unsigned int maxLength, uns
                             }
                         }
                     }else{
-                        result[cursorBufferIndex] = lastInputChar;
+                        runningConfig->result[cursorBufferIndex] = lastInputChar;
                         redrawLine(getCursorRowIndex());
                     }
                 }else{
@@ -1572,12 +1539,17 @@ void menuTextBox::msgTxtInputMultiline(char* result, unsigned int maxLength, uns
         lastTextBoxExitCode = 2;
         return;
     }
+    if(lastInputChar == '\e'){
+        _textBoxStatus = textBoxStatus::escPressed;    
+        lastTextBoxExitCode = 1;
+        return;
+    }
     //---------checks
-    _caractersPermesosStr = String(result);// re use of _caractersPermesosStr for final checks
-    if(strlen(result) < minLength){
-        _caractersPermesosStr = String(minLength)+" caracters minim";
+    _caractersPermesosStr = String(runningConfig->result);// re use of _caractersPermesosStr for final checks
+    if(strlen(runningConfig->result) < runningConfig->minLength){
+        /*_caractersPermesosStr = String(runningConfig->minLength)+" caracters minim";
         invertColors(&_caractersPermesosStr);
-        this->msgSmallWait(_caractersPermesosStr.c_str());
+        this->msgSmallWait(_caractersPermesosStr.c_str());*/
         _textBoxStatus = textBoxStatus::error;
         lastTextBoxExitCode = 5;
         return;
@@ -1587,30 +1559,25 @@ void menuTextBox::msgTxtInputMultiline(char* result, unsigned int maxLength, uns
         lastTextBoxExitCode = 6;
         return;
     }
-    if(_caractersPermesosStr.length() > _maxStrLen){
+    if(_caractersPermesosStr.length() > runningConfig->maxLength){
         _textBoxStatus = textBoxStatus::error;
         lastTextBoxExitCode = 7;
         return;
     }
     //---------checks end
     
-    strcpy(result, _caractersPermesosStr.c_str());
+    strcpy(runningConfig->result, _caractersPermesosStr.c_str());    
     
-    if(lastInputChar == '\e'){
-        _textBoxStatus = textBoxStatus::escPressed;    
-        lastTextBoxExitCode = 1;
-    }else{
-        _textBoxStatus = textBoxStatus::enterPressed;
-        lastTextBoxExitCode = 0;
-    }
+    _textBoxStatus = textBoxStatus::enterPressed;
+    lastTextBoxExitCode = 0;
+    
     return;
 }
 unsigned int menuTextBox::getCursorColIndex(){
-        return cursorBufferIndex%textLineWidth;
+        return cursorBufferIndex%runningConfig->textLineWidth;
 }
 unsigned int menuTextBox::getCaptionLinesCount(){
-    const char* caption = (_textBoxCallBack != nullptr) ? _textBoxCallBack->caption.c_str() : "InitError";
-    unsigned int captionLen = strlen(caption)+strlen(insertText);
+    unsigned int captionLen = strlen(runningConfig->prompt)+strlen(insertText);
     
     unsigned int lines = 1;
     if (terminalRowsCols[1] > 0 && captionLen > 0) {
@@ -1619,9 +1586,9 @@ unsigned int menuTextBox::getCaptionLinesCount(){
     return lines;
 }
 unsigned int menuTextBox::getWrittenLinesCount(){
-    unsigned int aa = strlen(_result);
-    aa = aa/textLineWidth;
-    if (strlen(_result) > (aa*textLineWidth)){
+    unsigned int aa = strlen(runningConfig->result);
+    aa = aa/runningConfig->textLineWidth;
+    if (strlen(runningConfig->result) > (aa*runningConfig->textLineWidth)){
         return aa+1;
     }
     return aa;
@@ -1629,29 +1596,29 @@ unsigned int menuTextBox::getWrittenLinesCount(){
 unsigned int menuTextBox::getCursorRowIndex(){
     /*unsigned int aa = cursorBufferIndex/textBoxWidth;
     return aa;*/
-    return cursorBufferIndex/textLineWidth;
+    return cursorBufferIndex/runningConfig->textLineWidth;
 }
 void menuTextBox::drawFrame(bool borrar){
     doCUD(getWrittenLinesCount()-getCursorRowIndex());// moves cursor down
-    if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > textLineWidth) {
+    if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > runningConfig->textLineWidth) {
         doCUB(getCursorColIndex()+1);// moves cursor to right
     }else{
         doCUB(getCursorColIndex());// moves cursor to right
     }
 
     if(borrar){
-        if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > textLineWidth) {
-            for(unsigned int i =0;i< (2+textLineWidth);i++)userTty->write(' ');
+        if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > runningConfig->textLineWidth) {
+            for(unsigned int i =0;i< (2+runningConfig->textLineWidth);i++)userTty->write(' ');
             for(unsigned int i =0;i< getWrittenLinesCount();i++){
                 doCUU();
                 doCUB();
                 userTty->write(' ');
-                doCUB(textLineWidth+2);
+                doCUB(runningConfig->textLineWidth+2);
                 userTty->write(' ');
-                doCUF(textLineWidth+1);
+                doCUF(runningConfig->textLineWidth+1);
             }
         }else{
-            for(unsigned int i =0;i< (1+textLineWidth);i++)userTty->write(' ');
+            for(unsigned int i =0;i< (1+runningConfig->textLineWidth);i++)userTty->write(' ');
             for(unsigned int i =0;i< getWrittenLinesCount();i++){
                 doCUB();
                 doCUU();
@@ -1659,20 +1626,20 @@ void menuTextBox::drawFrame(bool borrar){
             }
         }
     }else{
-        if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > textLineWidth) {
+        if (horizontallyCenter && terminalRowsCols[1] > 0 && terminalRowsCols[1] > runningConfig->textLineWidth) {
             userTty->write(frameChars[2]);
-            for(unsigned int i =0;i< textLineWidth;i++)userTty->write(frameChars[0]);
+            for(unsigned int i =0;i< runningConfig->textLineWidth;i++)userTty->write(frameChars[0]);
             userTty->write(frameChars[2]);
             for(unsigned int i =0;i< getWrittenLinesCount();i++){
                 doCUU();
                 doCUB();
                 userTty->write(frameChars[1]);
-                doCUB(textLineWidth+2);
+                doCUB(runningConfig->textLineWidth+2);
                 userTty->write(frameChars[1]);
-                doCUF(textLineWidth+1);
+                doCUF(runningConfig->textLineWidth+1);
             }
         }else{
-            for(unsigned int i =0;i< textLineWidth;i++)userTty->write(frameChars[0]);
+            for(unsigned int i =0;i< runningConfig->textLineWidth;i++)userTty->write(frameChars[0]);
             userTty->write(frameChars[2]);
             for(unsigned int i =0;i< getWrittenLinesCount();i++){
                 doCUB();
@@ -1681,7 +1648,7 @@ void menuTextBox::drawFrame(bool borrar){
             }
         }
     }
-    doCUB(textLineWidth+1);// cursor in position after top right frame character
+    doCUB(runningConfig->textLineWidth+1);// cursor in position after top right frame character
     doCUD(getCursorRowIndex());
     doCUF(getCursorColIndex());
     drawnFrameHeight = getWrittenLinesCount();
@@ -1689,8 +1656,7 @@ void menuTextBox::drawFrame(bool borrar){
 menuTextBox::menuTextBox(): menu(){
 }
 menuTextBox::~menuTextBox() {
-    _textBoxCallBack = nullptr;
-    _result = nullptr;
+    delete runningConfig;    
 }
 const char* menuTextBox::exitCodeDescription[] = {
     "exit by enter",//0
@@ -1706,17 +1672,15 @@ const char* menuTextBox::exitCodeDescription[] = {
 };
 #endif
 #ifdef _MENU_UI_BIG_RAM_
-menuTextBox menuSystemOverTty;
-menuTextBox * menuSystemOverTtyP = &menuSystemOverTty;
+menuTextBox menuSystemOverTty; 
+menuTextBox * menuSystemOverTtyP = &menuSystemOverTty; 
 #else
-menu menuSystemOverTty;
-menu * menuSystemOverTtyP = &menuSystemOverTty;
+menu menuSystemOverTty; 
+menu * menuSystemOverTtyP = &menuSystemOverTty; 
 #endif
 ```
 
 
-[public]: https://img.shields.io/badge/-public-brightgreen (public)
-[C++]: https://img.shields.io/badge/language-C%2B%2B-blue (C++)
-[private]: https://img.shields.io/badge/-private-red (private)
-[static]: https://img.shields.io/badge/-static-lightgrey (static)
-[protected]: https://img.shields.io/badge/-protected-yellow (protected)
+-------------------------------
+
+Updated on 2026-04-27 at 16:36:45 +0200

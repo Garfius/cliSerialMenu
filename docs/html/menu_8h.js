@@ -7,6 +7,22 @@ var menu_8h =
     [ "screenMenu", "classscreen_menu.html", "classscreen_menu" ],
     [ "menu", "classmenu.html", "classmenu" ],
     [ "textBoxMenuOption", "classtext_box_menu_option.html", "classtext_box_menu_option" ],
+    [ "textBoxConfig", "structtext_box_config.html", "structtext_box_config" ],
     [ "menuTextBox", "classmenu_text_box.html", "classmenu_text_box" ],
-    [ "queryterminalSizeTimeout", "menu_8h.html#aa0a17a95ab131571df9a625fd74ffe1c", null ]
+    [ "_MENU_UI_BIG_RAM_", "menu_8h.html#ab5c1e7d4bb061144388db2e422abdbf6", null ],
+    [ "defaultTextBoxWidth", "menu_8h.html#a747a09c3da30256f1b70e735b6a7a0e7", null ],
+    [ "displayMenuOptionsDefault", "menu_8h.html#a17fa68dadf757bd048564eb1b0a79836", null ],
+    [ "escBackMillisecondsDelay", "menu_8h.html#aa539a3070300aef5ea0b1661f0a9961b", null ],
+    [ "INPUT_BUFFER_SIZE", "menu_8h.html#aa9b8dcc02cea15aab8e3d0b7860327a7", null ],
+    [ "menuOptionsMax", "menu_8h.html#a72288823988215a55a00dc40ea61a0b1", null ],
+    [ "menuTextArrayLength", "menu_8h.html#ac76587272a788bb7757770f3ced7be23", null ],
+    [ "menuTextLength", "menu_8h.html#a4a0fbf9bba11658946fe94d48c205c11", null ],
+    [ "minTextBoxWidth", "menu_8h.html#ac703e8b9cfab10feb6bd75e4c9a66956", null ],
+    [ "queryterminalSizeTimeout", "menu_8h.html#aa0a17a95ab131571df9a625fd74ffe1c", null ],
+    [ "screenMenuMax", "menu_8h.html#ad0afcf7c19728a83e8055bf451d2010b", null ],
+    [ "terminalSizeMaxQueries", "menu_8h.html#aecf7b06440356b5a9a90ab2520a596db", null ],
+    [ "userInputLag", "menu_8h.html#a440b4791067da0672e4b3b049f3c25bb", null ],
+    [ "textBoxStatus", "menu_8h.html#ac4a84be0bf2a19771281a6659df073f5", null ],
+    [ "menuSystemOverTty", "menu_8h.html#a58aa1cbda0d0701af5cd55568509cd68", null ],
+    [ "menuSystemOverTtyP", "menu_8h.html#a2e8e5a0db1e23bfacce9ac4ad19e69e9", null ]
 ];

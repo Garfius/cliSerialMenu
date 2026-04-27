@@ -65,21 +65,118 @@ $(function(){initNavTree('class_char_buffer.html','','class_char_buffer-members'
   <div class="headertitle"><div class="title">CharBuffer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Circular character buffer used as intermediate input buffer for the text box editor.  
+ <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a085eb3caf663cb601c764b81ce498fb8" id="r_a085eb3caf663cb601c764b81ce498fb8"><td class="memItemLeft"><a id="a085eb3caf663cb601c764b81ce498fb8" name="a085eb3caf663cb601c764b81ce498fb8"></a>
-void&#160;</td><td class="memItemRight"><b>addChar</b> (char c)</td></tr>
-<tr class="memitem:a3b01d158f6173f772d85cccc69d54811" id="r_a3b01d158f6173f772d85cccc69d54811"><td class="memItemLeft"><a id="a3b01d158f6173f772d85cccc69d54811" name="a3b01d158f6173f772d85cccc69d54811"></a>
-char&#160;</td><td class="memItemRight"><b>consumeChar</b> ()</td></tr>
+<tr class="memitem:a085eb3caf663cb601c764b81ce498fb8" id="r_a085eb3caf663cb601c764b81ce498fb8"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a085eb3caf663cb601c764b81ce498fb8">addChar</a> (char c)</td></tr>
+<tr class="memdesc:a085eb3caf663cb601c764b81ce498fb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a character to the tail of the buffer.  <br /></td></tr>
+<tr class="memitem:a3b01d158f6173f772d85cccc69d54811" id="r_a3b01d158f6173f772d85cccc69d54811"><td class="memItemLeft">char&#160;</td><td class="memItemRight"><a class="el" href="#a3b01d158f6173f772d85cccc69d54811">consumeChar</a> ()</td></tr>
+<tr class="memdesc:a3b01d158f6173f772d85cccc69d54811"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes and returns a character from the head of the buffer.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a970e44e04c34c4934031bf7f30561083" id="r_a970e44e04c34c4934031bf7f30561083"><td class="memItemLeft"><a id="a970e44e04c34c4934031bf7f30561083" name="a970e44e04c34c4934031bf7f30561083"></a>
-volatile int&#160;</td><td class="memItemRight"><b>head</b> = 0</td></tr>
-<tr class="memitem:ac6b0d13dcfe605207e3bec22bebb27dc" id="r_ac6b0d13dcfe605207e3bec22bebb27dc"><td class="memItemLeft"><a id="ac6b0d13dcfe605207e3bec22bebb27dc" name="ac6b0d13dcfe605207e3bec22bebb27dc"></a>
-volatile int&#160;</td><td class="memItemRight"><b>tail</b> = 0</td></tr>
+<tr class="memitem:a970e44e04c34c4934031bf7f30561083" id="r_a970e44e04c34c4934031bf7f30561083"><td class="memItemLeft">volatile int&#160;</td><td class="memItemRight"><a class="el" href="#a970e44e04c34c4934031bf7f30561083">head</a> = 0</td></tr>
+<tr class="memitem:ac6b0d13dcfe605207e3bec22bebb27dc" id="r_ac6b0d13dcfe605207e3bec22bebb27dc"><td class="memItemLeft">volatile int&#160;</td><td class="memItemRight"><a class="el" href="#ac6b0d13dcfe605207e3bec22bebb27dc">tail</a> = 0</td></tr>
 </table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Circular character buffer used as intermediate input buffer for the text box editor. </p>
+<p>Provides lock-free single-producer/single-consumer FIFO storage up to INPUT_BUFFER_SIZE bytes. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a085eb3caf663cb601c764b81ce498fb8" name="a085eb3caf663cb601c764b81ce498fb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a085eb3caf663cb601c764b81ce498fb8">&#9670;&#160;</a></span>addChar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CharBuffer::addChar </td>
+          <td>(</td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>c</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds a character to the tail of the buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>character to enqueue </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3b01d158f6173f772d85cccc69d54811" name="a3b01d158f6173f772d85cccc69d54811"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b01d158f6173f772d85cccc69d54811">&#9670;&#160;</a></span>consumeChar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char CharBuffer::consumeChar </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes and returns a character from the head of the buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>next character in the buffer </dd></dl>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a970e44e04c34c4934031bf7f30561083" name="a970e44e04c34c4934031bf7f30561083"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a970e44e04c34c4934031bf7f30561083">&#9670;&#160;</a></span>head</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile int CharBuffer::head = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>read index, points to next character to consume </p>
+
+</div>
+</div>
+<a id="ac6b0d13dcfe605207e3bec22bebb27dc" name="ac6b0d13dcfe605207e3bec22bebb27dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6b0d13dcfe605207e3bec22bebb27dc">&#9670;&#160;</a></span>tail</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile int CharBuffer::tail = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>write index, points to next free slot </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="menu_8cpp.html">menu.cpp</a></li>
 </ul>

@@ -11,9 +11,9 @@
 #include "menu.h"
 
 //CONFIG HERE
-#define menuOptionDelimiter ':'
-#define cliMsgWait 1250 // push message timeout
-#define menuRefreshInterval 250 // self-explanatory
+#define menuOptionDelimiter ':' /**< separator between caption and value in menuOptionOnOff and menuOptionRangeValue */
+#define cliMsgWait 1250 /**< push message display timeout in milliseconds */
+#define menuRefreshInterval 250 /**< periodic screen refresh interval in milliseconds */
 
 static const char * pressAnyKeyToContinue = "Press any key to continue";
 
@@ -234,10 +234,12 @@ void menu::addscreen(screenMenu* pantalla){
     totalScreenMenus+=1;
 }
 /**
-Gracefully switch menu screen
-if coming from a run, no need to call show();
-@param pantallaDesti where to go
-*/
+ * @brief Gracefully switch menu screen.
+ *
+ * If coming from a run, no need to call show().
+ * @param pantallaDesti index of the target screen
+ * @param setWhereICame if true, records current screen as the origin so doBack() can return to it
+ */
 void menu::setscreen(int pantallaDesti,bool setWhereICame){
     if(activeScreenMenu > -1)pantalles[activeScreenMenu]->leave();
     if(setWhereICame)pantalles[pantallaDesti]->whereICame = activeScreenMenu;
@@ -893,15 +895,23 @@ void menu::queryTerminalSize(bool wait4Response){
 }
 
 #ifdef _MENU_UI_BIG_RAM_
+/**
+ * @brief Circular character buffer used as intermediate input buffer for the text box editor.
+ *
+ * Provides lock-free single-producer/single-consumer FIFO storage up to INPUT_BUFFER_SIZE bytes.
+ */
 class CharBuffer {
 private:
     volatile static char myCharBuffer[INPUT_BUFFER_SIZE];// whole ram must be buffer, lol
 public:
     
-    volatile int head = 0;
-    volatile int tail = 0;
+    volatile int head = 0; /**< read index, points to next character to consume */
+    volatile int tail = 0; /**< write index, points to next free slot */
 
-    // Add a character to the buffer
+    /**
+     * @brief Adds a character to the tail of the buffer.
+     * @param c character to enqueue
+     */
     void addChar(char c) {
         if (((tail + 1) % INPUT_BUFFER_SIZE) == head) { // Buffer is full
           //giveErrorVisibility(false);
@@ -910,7 +920,10 @@ public:
         tail = (tail + 1) % INPUT_BUFFER_SIZE;
     }
 
-    // Consume a character from the buffer
+    /**
+     * @brief Removes and returns a character from the head of the buffer.
+     * @return next character in the buffer
+     */
     char consumeChar() {
         if (head == tail) { // Buffer is empty
           //giveErrorVisibility(false);
@@ -922,7 +935,7 @@ public:
 };
 // Define static member of CharBuffer class
 volatile char CharBuffer::myCharBuffer[INPUT_BUFFER_SIZE];
-CharBuffer buffer;
+CharBuffer buffer; /**< global input character buffer instance used by the text box editor */
 
 textBoxMenuOption::textBoxMenuOption(){}
 textBoxMenuOption::textBoxMenuOption( const char* _text): menuOption(_text){}
@@ -1391,12 +1404,10 @@ void menuTextBox::drawTextPostCursor(unsigned int desDaquestaFinsAlFinal){
         redrawLine(i);
     }
 }
-/// @brief if cancel exits with editing=true
-/// @param resultat textbuffer where content is passed and returned
-/// @param allargadaMax size-1 of what is desired in char* resultat
-/// @param allargadaMin minimum text desired, can be 1
-/// @param caractersPermesos array of characters(char==byte==uint8_t) that the text must be able to contain
-/// @return textbuffer resultat is filled and usable
+/**
+ * @brief Multi-line text input editor. If cancelled, exits with editing still active.
+ * @param myConfig pointer to textBoxConfig struct containing prompt, result buffer, length limits and allowed characters
+ */
 void menuTextBox::msgTxtInputMultiline(textBoxConfig *myConfig){
     runningConfig = myConfig;
     lastInputChar = '\0';
@@ -1687,9 +1698,9 @@ const char* menuTextBox::exitCodeDescription[] = {
 };
 #endif
 #ifdef _MENU_UI_BIG_RAM_
-menuTextBox menuSystemOverTty;
-menuTextBox * menuSystemOverTtyP = &menuSystemOverTty;
+menuTextBox menuSystemOverTty; /**< global menu system instance (with text box support) */
+menuTextBox * menuSystemOverTtyP = &menuSystemOverTty; /**< pointer to the global menu system instance */
 #else
-menu menuSystemOverTty;
-menu * menuSystemOverTtyP = &menuSystemOverTty;
+menu menuSystemOverTty; /**< global menu system instance */
+menu * menuSystemOverTtyP = &menuSystemOverTty; /**< pointer to the global menu system instance */
 #endif

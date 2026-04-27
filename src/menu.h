@@ -14,29 +14,29 @@
 #define __menu__
 #include "terminalParser.h"
 #include <Arduino.h>
-#define terminalSizeMaxQueries 4
+#define terminalSizeMaxQueries 4 /**< maximum number of times the terminal size will be queried before giving up */
 //---------------------RESOURCES USAGE HERE
 //---------------------Uncomment the following line for microcontrollers bigger than Atmega328P line RP2040 or ESP32
-#define _MENU_UI_BIG_RAM_
+#define _MENU_UI_BIG_RAM_ /**< enables larger RAM features: bigger buffers, more screens, and the multiline text box editor */
 
 //---------------------RESOURCES USAGE HERE
 #ifdef _MENU_UI_BIG_RAM_
-  #define screenMenuMax 10// maximum screenMenu instances, displays
-  #define menuTextArrayLength 80 // Max caption length 
-  #define menuOptionsMax 15 // maximum menu options allowed in memory for each screenMenu instance
-  #define displayMenuOptionsDefault 9 // the amount of menu options on the screen, always lower than screenMenuMax
-  #define minTextBoxWidth 4
+  #define screenMenuMax 10 /**< maximum number of screenMenu instances (displays) */
+  #define menuTextArrayLength 80 /**< maximum caption/text buffer length including null terminator */
+  #define menuOptionsMax 15 /**< maximum number of menu options per screenMenu instance */
+  #define displayMenuOptionsDefault 9 /**< default number of menu options shown on screen; must be less than screenMenuMax */
+  #define minTextBoxWidth 4 /**< minimum allowed text box editor width in characters */
   #else
-  #define screenMenuMax 4// maximum screenMenu instances, displays of menuitems
-  #define menuTextArrayLength 40 // Max caption length 
-  #define menuOptionsMax 7 // maximum menu options allowed in memory for each screenMenu instance
-  #define displayMenuOptionsDefault 4 // the amount of menu options on the screen, always lower than screenMenuMax
+  #define screenMenuMax 4 /**< maximum number of screenMenu instances (displays) */
+  #define menuTextArrayLength 40 /**< maximum caption/text buffer length including null terminator */
+  #define menuOptionsMax 7 /**< maximum number of menu options per screenMenu instance */
+  #define displayMenuOptionsDefault 4 /**< default number of menu options shown on screen; must be less than screenMenuMax */
   #endif
   
   
-#define escBackMillisecondsDelay 450 // wait until esc is known as 'wants to go back'
-#define defaultTextBoxWidth 20
-#define menuTextLength (menuTextArrayLength-1)
+#define escBackMillisecondsDelay 450 /**< milliseconds to wait after ESC before treating it as a back-navigation key */
+#define defaultTextBoxWidth 20 /**< default single-line text input box width in characters */
+#define menuTextLength (menuTextArrayLength-1) /**< maximum usable caption length (excludes null terminator) */
 
 #define queryterminalSizeTimeout 250UL /**< milliseconds to wait for terminal size report */
 
@@ -68,7 +68,8 @@ class menuOption{
 */
 class menuOptionOnOff :public menuOption{
   public:
-    bool state,statePrinted;
+    bool state; /**< current on/off state */
+    bool statePrinted; /**< last state that was rendered to the terminal */
     menuOptionOnOff();/**< for compiler puposes, better not to use it*/
     menuOptionOnOff(const char* text,bool initValue=false);/**< constructor, sets the caption text, do not use ':', might set init value */
     virtual bool refresh() override;/**< inherit to do your thing */
@@ -81,7 +82,11 @@ class menuOptionOnOff :public menuOption{
 */
 class menuOptionRangeValue :public menuOption{
   public:
-    int state,statePrinted,_maxValue,_minValue,_step;
+    int state; /**< current value */
+    int statePrinted; /**< last value that was rendered to the terminal */
+    int _maxValue; /**< upper bound of the allowed range */
+    int _minValue; /**< lower bound of the allowed range */
+    int _step; /**< amount to increment or decrement per arrow key press */
     menuOptionRangeValue();/**< for compiler puposes, better not to use it*/
     menuOptionRangeValue(const char* text, int minVal, int maxVal, int initValue, int step=1);/**< constructor, sets the caption text, do not use ':', maximum, minimum, initial value, might set step */
     virtual bool refresh() override;/**< inherit to do your thing */
@@ -93,7 +98,7 @@ class menuOptionRangeValue :public menuOption{
 */
 class changeScreenMenuOption : public menuOption{
     public:
-        screenMenu* _menuDesti;
+        screenMenu* _menuDesti; /**< pointer to the target screenMenu to navigate to */
         changeScreenMenuOption(screenMenu* menuDesti);/**< constructor needs target screen to jump to */
         void run() override;/**< to be called by menu */
         bool refresh() override;/**< to be called by menu  */
@@ -110,7 +115,7 @@ class screenMenu{
     bool hasMoreBelow = false;/**< tells menu wants Dn!(msgOptionsDn) to be shown */
     unsigned int totalMenuOptions;/**< running time total inserted options/options */
     unsigned int offsetFromTop =0;/**< to slide down tru menuoptions 'no dinamic-generated scroll', not used on inheritance*/
-    unsigned int lastSelectedMenuOptionIndex = 0;
+    unsigned int lastSelectedMenuOptionIndex = 0; /**< remembers the highlighted option index when returning to this screen */
     char titol[menuTextArrayLength];/**< menu caption*/
     menuOption *displayMenuOptionsPnt[menuOptionsMax];/**< pointers to menu option/option objects shown , and run by menu*/
     screenMenu(const char* text);/**< constructor, sets text, needs menu*/
@@ -119,7 +124,7 @@ class screenMenu{
     virtual bool pushDn();/**< menu showing us tells to push Dn*/
     virtual bool pushRt(unsigned int index);/**< menu showing us tells to push right */
     virtual bool pushLt(unsigned int index);/**< menu showing us tells to push left */
-    virtual bool addMenuOption(menuOption* menuoption);
+    virtual bool addMenuOption(menuOption* menuoption); /**< adds a menuOption pointer to this screen; returns false if menuOptionsMax is reached */
     virtual bool refreshMenu();/**< called when menu changes and periodically if autoRefresh = true */
     virtual void run(unsigned int index);/**< calls run() on the index menuoption */
     virtual void leave();/**< called when leaving screen */
@@ -134,7 +139,7 @@ class screenMenu{
 */
 class menu : public terminalParser{
   protected:
-    static constexpr char frameChars[3] = {'-','|','+'};//horizontal, vertical, corner
+    static constexpr char frameChars[3] = {'-','|','+'};/**< border characters: [0]=horizontal, [1]=vertical, [2]=corner */
     unsigned int selectedMenuOption;/**< the actual selected menu index option on display*/
     unsigned long nextRefresh = 0;/**< screen refresh control*/
     bool runningOption = false;/**< esta excutant una opcio */
@@ -149,13 +154,13 @@ class menu : public terminalParser{
     virtual void cr() override;/**< inherited from terminalParser. enter */
     char lastInputChar;/**< temporal character*/
   public:
-    void queryTerminalSize(bool wait4Response=true);
+    void queryTerminalSize(bool wait4Response=true); /**< sends cursor-position probe to discover terminal dimensions; waits for CPR response when wait4Response is true */
     unsigned long nextEscBack = 0;/**< move screen back using esc control */
-    uint8_t _topPadding = 1;/**< */
+    uint8_t _topPadding = 1; /**< number of rows reserved at the top when not vertically centering */
     bool askTerminalSize = true;/**< ask terminal size before menu show (client might respond after being shown) */
     bool verticallyCenter = false;/**< WARNING: operations clears screen! */
     bool horizontallyCenter = true;/**< user operations are shown centered on screen */
-    unsigned int terminalRowsCols[2] = {0, 0};/** reported size rows and cols, 0 means not initialized*/
+    unsigned int terminalRowsCols[2] = {0, 0}; /**< reported terminal size: [0]=rows, [1]=columns; 0 means not yet initialised */
     uint8_t terminalSizeQueries = 0;/**< number of times terminal size has been queried */
     int activeScreenMenu = -1;/**< the actual displayed menu*/
     int totalScreenMenus = 0;/**< total amount of displayable/showAble display menus*/
@@ -174,25 +179,25 @@ class menu : public terminalParser{
     bool msgYes(const char* prompt);/**< asks yes/no to given text, return true if (y || Y) is press*/
     void msgPause();/**< shows default text and waits any keypress to continue */
     //----------style print operations
-    void printLnCentered(const char* text);
-    void printLnCentered(const String &text);
-    void printLnCentered();
-    void printLnCentered(char c);
-    void printLnCentered(unsigned char b, int base = DEC);
-    void printLnCentered(int num, int base = DEC);
-    void printLnCentered(unsigned int num, int base = DEC);
-    void printLnCentered(long num, int base = DEC);
-    void printLnCentered(unsigned long num, int base = DEC);
-    void printLnCentered(long long num, int base = DEC);
-    void printLnCentered(unsigned long long num, int base = DEC);
-    void printLnCentered(double num, int digits = 2);
+    void printLnCentered(const char* text); /**< prints text followed by newline, horizontally centred when horizontallyCenter is set */
+    void printLnCentered(const String &text); /**< @overload */
+    void printLnCentered(); /**< prints an empty line */
+    void printLnCentered(char c); /**< @overload */
+    void printLnCentered(unsigned char b, int base = DEC); /**< @overload */
+    void printLnCentered(int num, int base = DEC); /**< @overload */
+    void printLnCentered(unsigned int num, int base = DEC); /**< @overload */
+    void printLnCentered(long num, int base = DEC); /**< @overload */
+    void printLnCentered(unsigned long num, int base = DEC); /**< @overload */
+    void printLnCentered(long long num, int base = DEC); /**< @overload */
+    void printLnCentered(unsigned long long num, int base = DEC); /**< @overload */
+    void printLnCentered(double num, int digits = 2); /**< @overload */
     void drawProgressBar(uint32_t value, uint32_t total, char* progressBar);
     
-    uint8_t dotLeadersMargin = 2;
-    uint8_t dotLeadersMinDots = 2;
-    char dotLeadersChar = '.';
-    unsigned int dotLeadersDefaultWidth = menuTextArrayLength;
-    unsigned int printDotLeaders(const char* left, const char* right, int margin = -1, int minDots = -1);
+    uint8_t dotLeadersMargin = 2; /**< left and right blank padding columns surrounding the dot-leader row */
+    uint8_t dotLeadersMinDots = 2; /**< minimum number of dot characters always printed between left and right text */
+    char dotLeadersChar = '.'; /**< character used to fill the dot-leader gap */
+    unsigned int dotLeadersDefaultWidth = menuTextArrayLength; /**< fallback line width used when terminal width is unknown */
+    unsigned int printDotLeaders(const char* left, const char* right, int margin = -1, int minDots = -1); /**< prints a dot-leader line with left and right text, returns number of lines printed */
     void setPrettyDotLeadersMargin(int bothTextsLength);/**< Sets dotLeadersMargin based on terminal width for aesthetics */
     //---------not so used, rarely for public use
     void setscreen(int targetScreenMenu, bool setWhereICame = true);/**< change the showing screen*/
@@ -202,8 +207,11 @@ class menu : public terminalParser{
 };
 
 #ifdef _MENU_UI_BIG_RAM_
-#define userInputLag 50
-#define INPUT_BUFFER_SIZE 320
+#define userInputLag 50 /**< milliseconds debounce delay after a user key press in the text box editor */
+#define INPUT_BUFFER_SIZE 320 /**< size in bytes of the circular character buffer used by the text box editor */
+/**
+ * @brief Status codes for the multiline text box editor session.
+ */
 enum textBoxStatus {
   noExit,
   activeEditor,
@@ -212,24 +220,39 @@ enum textBoxStatus {
   enterPressed,
   error
 };
+/**
+ * @brief Base class for menu options that own a multiline text box editor.
+ *
+ * Inherit this class and override run(), checkBackgroundEvents(), and performUserInteraction()
+ * to integrate a text box editing session with the menu system.
+ */
 class textBoxMenuOption:public menuOption{
 protected:
 public:
-    textBoxMenuOption();
-    textBoxMenuOption( const char* text);
+    textBoxMenuOption(); /**< for compiler purposes, do not use directly */
+    textBoxMenuOption( const char* text); /**< constructor; sets the caption text */
     virtual void run() override;
     virtual bool checkBackgroundEvents();
     virtual bool performUserInteraction();
 };
+/**
+ * @brief Configuration structure passed to menuTextBox::msgTxtInputMultiline().
+ */
 struct textBoxConfig{
-  const char* prompt = nullptr;
-  char* result = nullptr;
-  unsigned int maxLength=0;
-  unsigned int minLength=0;
-  const char * allowedChars = nullptr;
-  textBoxMenuOption* _textBoxCallBack = nullptr;
+  const char* prompt = nullptr; /**< text displayed above the editor frame as the input prompt */
+  char* result = nullptr; /**< pointer to the buffer where the edited text is read from and written back to */
+  unsigned int maxLength=0; /**< maximum number of characters accepted (0 = use textLineWidth-1) */
+  unsigned int minLength=0; /**< minimum number of characters required (0 = 1) */
+  const char * allowedChars = nullptr; /**< null-terminated string of permitted characters; nullptr allows all printable characters */
+  textBoxMenuOption* _textBoxCallBack = nullptr; /**< optional callback object whose checkBackgroundEvents() and performUserInteraction() are polled during editing */
   uint16_t textLineWidth = defaultTextBoxWidth;/**< for textBox editor width */
 };
+/**
+ * @brief Multiline text box editor extension of menu.
+ *
+ * Adds an in-place full-screen text editor to the menu system. Activated via
+ * msgTxtInputMultiline(). Only available when _MENU_UI_BIG_RAM_ is defined.
+ */
 class menuTextBox:public  menu{
   private:
     bool lastInsertStatus;
@@ -264,19 +287,19 @@ class menuTextBox:public  menu{
     void cr() override;/**< inherited from terminalParser. carriage return */
     textBoxConfig * runningConfig;
   public:
-    static const char* exitCodeDescription[];
-    uint8_t lastTextBoxExitCode =0;
-    textBoxStatus _textBoxStatus = textBoxStatus::noExit;
+    static const char* exitCodeDescription[]; /**< human-readable descriptions indexed by exit code value */
+    uint8_t lastTextBoxExitCode =0; /**< exit code of the last msgTxtInputMultiline() call */
+    textBoxStatus _textBoxStatus = textBoxStatus::noExit; /**< current or last editor session status */
     menuTextBox();
     ~menuTextBox(); // ensur e cleanup of dynamic buffer
     void msgTxtInputMultiline(textBoxConfig * myConfig);
 };
-extern menuTextBox menuSystemOverTty;
-extern menuTextBox * menuSystemOverTtyP;
+extern menuTextBox menuSystemOverTty; /**< global menu system instance (with text box support) */
+extern menuTextBox * menuSystemOverTtyP; /**< pointer to the global menu system instance */
 
 #else
-extern menu menuSystemOverTty;
-extern menu * menuSystemOverTtyP;
+extern menu menuSystemOverTty; /**< global menu system instance */
+extern menu * menuSystemOverTtyP; /**< pointer to the global menu system instance */
 #endif
 
 #endif

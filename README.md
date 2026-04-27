@@ -1,20 +1,26 @@
 # Arduino Menu UI
 
-An [Arduino](https://arduino.cc/) library which provides a menu based user interface and a few UI utilities.
+An [Arduino](https://arduino.cc/) library that provides a menu-based user interface and UI utilities over a VT100-compatible serial terminal (PuTTY, screen, TeraTerm, etc.).
 
-Really elastic, just instantiate inherited menu option's and add it to a screen, and add the screens to the menu system.
+## Features
 
-The menu system as usual needs a kickstart citing the serial where the vt100 compatible user interface is located (putty, screen, teraTerm...
+- Elastic menu system: instantiate menu option objects, add them to screens, and add screens to the menu system.
+- Automatic display positioning when the terminal reports its screen size (can be disabled).
+- Multi-line text box editor (`menuTextBox`).
+- Supports scrolling and dynamically generated menus.
 
-Press esc to refresh if needed.
+Press **Esc** to refresh the display at any time.
 
-If screen size is reported by the user console, uses automatic display positioning (can be disabled).
+## Quick Start
+
+Initialize in `setup()`:
 
 ```c++
-menuSystemOverTty.init(&Serial);// requiered at boot 
+menuSystemOverTty.init(&Serial); // required at boot
 ```
 
-And the obvious RUN
+Call from `loop()`:
+
 ```c++
 void loop() {
   menuSystemOverTty.run();
@@ -23,55 +29,65 @@ void loop() {
 
 ## Compatible Hardware
 
-Tested on ATMega328p(Arduino nano) and RP2040(Raspberry pi pico-maxgerhardt/earlephilhower-platformio) and ESP32
+Tested on:
 
-***To use with low memory boards(ATMega328...):***
-Comment at menu.h line 20
+- ATmega328P (Arduino Nano)
+- RP2040 (Raspberry Pi Pico — maxgerhardt/earlephilhower PlatformIO)
+- ESP32
+
+### Low-Memory Boards (ATmega328…)
+
+Comment out the following line in [menu.h](../lib/cliSerialMenu/menu.h) at line 20:
+
 ```c++
 #define _MENU_UI_BIG_RAM_
 ```
 
-**NOTES**:
- * Be aware of text captions text(char *) length, must be shorter than menuTextArrayLength(menu.h), might corrupt memory!
- * YOU must learn Object Oriented Programming, and inheritance, or just copy examples, lol
+## Notes
+
+> **Warning:** Caption strings (`char *`) must be shorter than `menuTextArrayLength` (defined in `menu.h`). Exceeding this limit may corrupt memory.
+
+- You must understand Object-Oriented Programming and inheritance — or just copy the examples.
 
 ## API
 
-I ran DoxyGen, so, here it is:
+Generated with [Doxygen](https://www.doxygen.nl/).
 
-Best is html(must clone) docs/html/index.html
-
-![moxygen translated](/docs/mdMoxygen/index.md)
+- **HTML docs** (requires cloning): `docs/html/index.html`
+- **Markdown docs**: [docs/doxybook2/index_classes.md](/docs/doxybook2/index_classes.md)
 
 ## Examples
 
-See [examples](examples) folder.
+See the [examples](examples) folder.
 
-## This is what you get
+## Screenshots
 
-demo0.ino initial screen
-![demo0.ino initial screen](/docs/pictures/demo0.jpg)
+### demo0 — Initial Screen
 
-demo1.ino initial screen
-![demo1.ino initial screen](/docs/pictures/demo1.gif)
+![demo0 initial screen](/docs/pictures/demo0.jpg)
 
-[demo1.ino video](https://youtu.be/EKHbzrODCdk)
+### demo1 — Animated UI
 
-demo2.ino dynamically generated scrolling menu
+![demo1 initial screen](/docs/pictures/demo1.gif)
+
+[![demo1 video](https://img.shields.io/badge/Watch-YouTube-red)](https://youtu.be/EKHbzrODCdk)
+
+### demo2 — Dynamic Scrolling Menu
+
 ![Dynamically generated scrolling menu](/docs/pictures/dynamic.gif)
 
-Some user interface features
+### demo2 — UI Features
+
 ![Some user interface features](/docs/pictures/UI_stuff.gif)
 
-demo2.ino text box long string editor
+### demo2 — Text Box String Editor
+
 ![Text box long string editor](/docs/pictures/demo2-1.jpg)
 
-Demo3.ino sd card browser
+### demo3 — SD Card Browser
+
 ![SD card browser](/docs/pictures/demo3-0.jpg)
 
-Demo3.ino sd card browser, file info
-![SD card browser](/docs/pictures/demo3-1.jpg)
+![SD card browser file info](/docs/pictures/demo3-1.jpg)
 
-[SD card browser video at demo3](https://youtu.be/0rnFhgVs5PA)
-
-
+[![demo3 video](https://img.shields.io/badge/Watch-YouTube-red)](https://youtu.be/0rnFhgVs5PA)
