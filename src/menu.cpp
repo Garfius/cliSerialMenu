@@ -1030,6 +1030,7 @@ void menuTextBox::del(){
 }
 void menuTextBox::backSpace(){
     if(_textBoxStatus== textBoxStatus::activeEditor){
+        if(!cursorBufferIndex)return;
         removeCharAtIndex(cursorBufferIndex-1);
         if(getCursorColIndex() > 0){
             doCUB();
