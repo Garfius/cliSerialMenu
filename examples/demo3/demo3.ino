@@ -109,6 +109,11 @@ void sdBrowserDisplay::enter(){
     this->refreshMenu();
 }
 void sdBrowserDisplay::leave(){
+    if(!whereICame){
+        whereICame=1;
+    }else{
+        whereICame=0;
+    }
     lastSelectedMenuOptionIndex =0;
     if(currentFolder.length() == 0){
         menuSystemOverTtyP->doClearScreen();
@@ -243,8 +248,10 @@ void setup() {
   
   //build menu structure
   menuSystemOverTty.addscreen(&navegador);
+  menuSystemOverTty.addscreen(&navegador);
   //menu init
   menuSystemOverTty.init(&serialPortUsed);// requiered at boot 
+  navegador.whereICame = 1;
 }
 
 void loop() {
